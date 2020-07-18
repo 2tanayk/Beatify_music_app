@@ -48,6 +48,7 @@
         android:background="#ffffff"
         android:backgroundTint="#1A336BA3"
         android:elevation="10dp"
+        android:onClick="forgotPassword"
         android:text="Forgot password?"
         android:textColor="#000000" />
 
@@ -58,6 +59,7 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/rounded_corner"
         android:elevation="10dp"
+        android:onClick="login"
         android:text="Login"
         android:textColor="@android:color/background_dark"
         android:textSize="15sp" />

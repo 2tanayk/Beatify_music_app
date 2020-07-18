@@ -1,28 +1,94 @@
 package com.myapp.beatify;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class LoginActivity extends AppCompatActivity
+{
+    private EditText emailTxt;
+    private EditText passwordTxt;
+
+    public FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Intent i=getIntent();
-    }
-    public void register(View v)
-    {
-        Intent r=new Intent(LoginActivity.this,RegisterActivity.class);
-        startActivity(r);
+
+        emailTxt=(EditText)findViewById(R.id.emailEditText);
+        passwordTxt=(EditText)findViewById(R.id.passwordEditText);
+
+        mAuth=FirebaseAuth.getInstance();
 
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    public void register(View v)
+    {
+        Intent r=new Intent(LoginActivity.this,RegisterActivity.class);
+        startActivity(r);
+    }
+
+
+    public void login(View v) {
+        String emailId=emailTxt.getText().toString();
+        String password=passwordTxt.getText().toString();
+        if(TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password))
+        {
+            Toast.makeText(LoginActivity.this,"One or more fields are empty!",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            loginUser(emailId, password);
+        }
+    }
+
+    private void loginUser(String emailId, String password) {
+        mAuth.signInWithEmailAndPassword(emailId, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(LoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                Intent b=new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(b);
+                finish();
+            }
+        });
+    }
+
+    public void forgotPassword(View v) {
+        try{
+        mAuth.sendPasswordResetEmail(emailTxt.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("task:", "Email sent.");
+                            Toast.makeText(LoginActivity.this, "Email sent!check your inbox..", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Enter your email id!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
