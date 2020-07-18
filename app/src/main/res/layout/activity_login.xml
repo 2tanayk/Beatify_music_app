@@ -72,7 +72,7 @@
         android:background="#ffffff"
         android:backgroundTint="#1A336BA3"
         android:elevation="10dp"
-        android:onClick="register"
+        android:onClick="registerPage"
         android:text="New User?Register!"
         android:textColor="#000000" />
 </LinearLayout>

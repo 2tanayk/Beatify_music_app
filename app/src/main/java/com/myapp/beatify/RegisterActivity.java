@@ -18,36 +18,35 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity
 {
-//    private Button register;
+    public static String TAG="Register page activity";
+
     private EditText emailTxt;
     private EditText passwordTxt;
 
     public FirebaseAuth mAuth;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Intent i=getIntent();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Back arrow icon created in the toolbar
+        //set LoginActivity as parent activity of RegisterActivity to enable functionality
 
         mAuth=FirebaseAuth.getInstance();
 
-//        register=findViewById(R.id.registerBtn);
         emailTxt=(EditText)findViewById(R.id.emailEditText2);
         passwordTxt=(EditText)findViewById(R.id.passwordEditText2);
-
-    }
-
-
+    }//onCreate ends
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         super.onBackPressed();
-    }
+    }//onBackPressed ends
 
-    public void homeScreen(View v)
+    public void register(View v)
     {
         String emailId=emailTxt.getText().toString();
         String password=passwordTxt.getText().toString();
@@ -55,33 +54,35 @@ public class RegisterActivity extends AppCompatActivity
         if(TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password))
         {
             Toast.makeText(RegisterActivity.this,"One or more fields are empty!",Toast.LENGTH_SHORT).show();
-        }
+        }//if ends
         else if(password.length()<6){
             Toast.makeText(RegisterActivity.this,"Password should be min. 6 characters",Toast.LENGTH_SHORT).show();
-        }else
+        }//else-if ends
+        else
         {
             registerUser(emailId,password);
-        }
-
-    }
+        }//else ends
+    }//register ends
 
     private void registerUser(String emailId, String password)
     {
        mAuth.createUserWithEmailAndPassword(emailId, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
            @Override
-           public void onComplete(@NonNull Task<AuthResult> task) {
+           public void onComplete(@NonNull Task<AuthResult> task)
+           {
               if(task.isSuccessful())
               {
                   Toast.makeText(RegisterActivity.this,"Welcome!",Toast.LENGTH_SHORT).show();
                   Intent n=new Intent(RegisterActivity.this,MainActivity.class);
                   startActivity(n);
                   finish();
-              }else {
+              }//if ends
+              else {
                   Toast.makeText(RegisterActivity.this,"Failed :(",Toast.LENGTH_SHORT).show();
-              }
-           }
+              }//else ends
+           }//onComplete ends
        });
-    }
 
+    }//registerUser ends
 
-}
+}//class ends

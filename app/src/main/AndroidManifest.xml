@@ -16,7 +16,7 @@
             android:name=".RegisterActivity"
             android:parentActivityName=".LoginActivity"></activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".StartScreen" />
+        <activity android:name=".WelcomeScreen" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
