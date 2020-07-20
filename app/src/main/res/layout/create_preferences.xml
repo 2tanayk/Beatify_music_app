@@ -23,7 +23,7 @@
             android:text="EDM"
             android:textColor="#84C0F4"
             android:textSize="50sp"
-            android:id="@+id/genreImgTxt"/>
+            android:id="@+id/genreImgTxt" />
 
     </LinearLayout>
 

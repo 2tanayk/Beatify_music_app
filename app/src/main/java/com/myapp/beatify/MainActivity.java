@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
+    //MainActivity which acts as a fragment holder
     public static FragmentManager fragmentManager;
 
     @Override
@@ -15,18 +15,16 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentManager=getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
-        if(findViewById(R.id.fragment_container)!=null)
-        {
-            if(savedInstanceState!=null)
-            {
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
                 return;
-            }
-            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-            PreferencesFragment preferencesFragment=new PreferencesFragment();
-            fragmentTransaction.add(R.id.fragment_container,preferencesFragment,null);
+            }//inner if ends
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            PreferencesFragment preferencesFragment = new PreferencesFragment();
+            fragmentTransaction.add(R.id.fragment_container, preferencesFragment, null);
             fragmentTransaction.commit();
-        }
+        }//if ends
     }//onCreate ends
 }//class ends

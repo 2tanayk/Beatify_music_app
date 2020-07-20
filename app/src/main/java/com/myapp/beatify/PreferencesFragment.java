@@ -15,8 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreferencesFragment extends Fragment
-{
+public class PreferencesFragment extends Fragment {
+    //Fragment FOR music preference page
     private List<CreatePreferences> clist;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -24,18 +24,18 @@ public class PreferencesFragment extends Fragment
 
     public static int posn;
     View view;
+
     @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_preferences, container, false);
+        view = inflater.inflate(R.layout.fragment_preferences, container, false);
         createRecyclerView();
         return view;
     }//onCreateView ends
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         createList();
@@ -43,22 +43,22 @@ public class PreferencesFragment extends Fragment
 
 
     private void createList() {
-        clist=new ArrayList<>();
+        clist = new ArrayList<>();
 
 
-        clist.add(new CreatePreferences("Heavy Metal",R.drawable.heavymetal));
-        clist.add(new CreatePreferences("Bollywood",R.drawable.bollywoodmusic));
-        clist.add(new CreatePreferences("EDM",R.drawable.edm));
-        clist.add(new CreatePreferences("Singles",R.drawable.singles));
-        clist.add(new CreatePreferences("Band",R.drawable.bands));
-        clist.add(new CreatePreferences("Rap",R.drawable.rap));
+        clist.add(new CreatePreferences("Heavy Metal", R.drawable.heavymetal));
+        clist.add(new CreatePreferences("Bollywood", R.drawable.bollywoodmusic));
+        clist.add(new CreatePreferences("EDM", R.drawable.edm));
+        clist.add(new CreatePreferences("Singles", R.drawable.singles));
+        clist.add(new CreatePreferences("Band", R.drawable.bands));
+        clist.add(new CreatePreferences("Rap", R.drawable.rap));
 
-    }
+    }//createList ends
 
     private void createRecyclerView() {
-        mRecyclerView=view.findViewById(R.id.prefRV);
+        mRecyclerView = view.findViewById(R.id.prefRV);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter=new PreferencesAdapter(clist);
+        mAdapter = new PreferencesAdapter(clist);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -66,10 +66,10 @@ public class PreferencesFragment extends Fragment
         mAdapter.setOnItemClickListener(new PreferencesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                posn=position;
+                posn = position;
                 //Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
-            }
+            }//onItemClick ends
         });
 
-    }
+    }//createRecyclerView ends
 }//class ends
