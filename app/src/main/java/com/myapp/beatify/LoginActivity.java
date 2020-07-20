@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity
     {
         Intent r=new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(r);
+        finish();
     }//registerPage ends
 
 
