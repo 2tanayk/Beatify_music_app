@@ -21,10 +21,16 @@ public class MainActivity extends AppCompatActivity {
             if (savedInstanceState != null) {
                 return;
             }//inner if ends
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            PreferencesFragment preferencesFragment = new PreferencesFragment();
-            fragmentTransaction.add(R.id.fragment_container, preferencesFragment, null);
-            fragmentTransaction.commit();
+
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //PreferencesFragment preferencesFragment = new PreferencesFragment();
+            fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), null).commit();
+//            fragmentTransaction.commit();
         }//if ends
     }//onCreate ends
+
+    public static void onGenreClicked()
+    {
+//        fragmentManager.beginTransaction().replace(R.id.fragment_container,new Holder(),null).commit();
+    }
 }//class ends
