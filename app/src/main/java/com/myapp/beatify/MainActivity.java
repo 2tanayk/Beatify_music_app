@@ -31,6 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void onGenreClicked()
     {
-//        fragmentManager.beginTransaction().replace(R.id.fragment_container,new Holder(),null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container,new Holder(),null).commit();
     }
 }//class ends

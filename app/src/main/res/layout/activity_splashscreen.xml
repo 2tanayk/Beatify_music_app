@@ -8,12 +8,28 @@
 
     <ImageView
         android:id="@+id/ssImageView"
-        android:layout_width="403dp"
-        android:layout_height="358dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="345dp"
+        android:layout_height="341dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/beatifylogo" />
+        app:srcCompat="@drawable/app_logo" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="295dp"
+        android:layout_height="85dp"
+        android:fontFamily="@font/architects_daughter"
+        android:gravity="center"
+        android:text="Beatify"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ssImageView"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

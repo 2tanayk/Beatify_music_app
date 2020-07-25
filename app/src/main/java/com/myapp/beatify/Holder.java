@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,24 +23,34 @@ public class Holder extends Fragment {
     View view;
     BottomNavigationView bottomNavigationView;
     private static Fragment childFragment;
+    private DrawerLayout drawerLayout;
 //    private static FragmentTransaction transaction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }//onCreate ends
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         view=inflater.inflate(R.layout.fragment_holder_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_holder_fragment, container, false);
 
-          return view;
+
+        return view;
     }//onCreateView ends
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        bottomNavigationView=view.findViewById(R.id.bottom_nav_bar);
+        Toolbar toolbar=view.findViewById(R.id.toolbar);
+        drawerLayout=view.findViewById(R.id.homeFrag);
+
+        ActionBarDrawerToggle actionBarDrawerToggle=new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        bottomNavigationView = view.findViewById(R.id.bottom_nav_bar);
         //set default as home page
         childFragment = new HomeChildFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.frag_holder, childFragment).commit();
@@ -45,13 +58,13 @@ public class Holder extends Fragment {
         switchPage();
     }
 
+
     private void switchPage() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId())
-                {
+                switch (item.getItemId()) {
                     case R.id.nav_home:
                         childFragment = new HomeChildFragment();
                         break;
@@ -63,7 +76,7 @@ public class Holder extends Fragment {
                         break;
                     default:
                         Toast.makeText(getContext(), "oops :(", Toast.LENGTH_SHORT).show();
-            }
+                }
 
                 getChildFragmentManager().beginTransaction().replace(R.id.frag_holder,
                         childFragment).commit();
@@ -72,11 +85,8 @@ public class Holder extends Fragment {
             }
         });
     }
+
+
 }//class ends
 
 
-
-
-
-
-//        return view;

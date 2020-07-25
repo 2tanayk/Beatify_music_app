@@ -67,8 +67,8 @@ public class PreferencesFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 posn = position;
-//             MainActivity.onGenreClicked();
-                //Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
+             MainActivity.onGenreClicked();
+             //Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
             }//onItemClick ends
         });
 
