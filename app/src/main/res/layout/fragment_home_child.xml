@@ -4,11 +4,10 @@
     android:id="@+id/homeLL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="5dp"
-    android:paddingRight="16dp"
+    android:paddingRight="10dp"
     android:paddingBottom="0dp"
     tools:context=".HomeChildFragment">
 
@@ -17,42 +16,89 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/almendra_italic"
+                android:paddingLeft="10sp"
+                android:text="Songs of your liking"
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="30sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_liking_RV"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="270dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
             </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/almendra_italic"
+                android:paddingLeft="10sp"
+                android:text="Recently Played"
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="30sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_recent_RV"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
             </androidx.recyclerview.widget.RecyclerView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/our_picks_RV"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:fontFamily="@font/almendra_italic"-->
+<!--                android:paddingLeft="10sp"-->
+<!--                android:text="Recommended"-->
+<!--                android:textAllCaps="true"-->
+<!--                android:textColor="#000000"-->
+<!--                android:textSize="30sp" />-->
 
-            </androidx.recyclerview.widget.RecyclerView>
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/our_picks_RV"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="150dp"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--            </androidx.recyclerview.widget.RecyclerView>-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/almendra_italic"
+                android:paddingLeft="10sp"
+                android:text="Our picks"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="30sp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/latest_RV"
+                android:id="@+id/our_RV"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 

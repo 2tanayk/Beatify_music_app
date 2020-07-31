@@ -14,6 +14,7 @@ import java.util.List;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> {
     private List<CreateSong> mSongList;
 
+
     public SongAdapter(List<CreateSong> mSongList) {
         this.mSongList = mSongList;
     }

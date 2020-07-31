@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/user_liking_CV"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="260dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="#1A336BA3">
+    app:cardBackgroundColor="#1A336BA3"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +18,7 @@
         <ImageView
             android:id="@+id/likingImg"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="220dp"
             android:scaleType="fitXY"
             android:src="@drawable/martin" />
 
@@ -28,7 +30,7 @@
             android:fontFamily="@font/artifika"
             android:gravity="center"
             android:text="Waiting For Tomorrow"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 

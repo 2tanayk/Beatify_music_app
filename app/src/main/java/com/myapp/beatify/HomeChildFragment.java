@@ -18,12 +18,16 @@ import java.util.List;
 public class HomeChildFragment extends Fragment {
     private List<CreateSong> tList;
     private List<CreateSong> recentList;
+    private List<CreateSong> ourList;
+    private List<String> urls;
 
     private RecyclerView tRecyclerView;
     private RecyclerView recentRecyclerView;
+    private RecyclerView ourRecyclerView;
 
     private RecyclerView.Adapter tAdapter;
     private RecyclerView.Adapter rAdapter;
+    private RecyclerView.Adapter oAdapter;
 
 //    private RecyclerView.LayoutManager tLayoutManager;
 
@@ -34,7 +38,10 @@ public class HomeChildFragment extends Fragment {
         super.onCreate(savedInstanceState);
         createUserLikingList();
         createUserRecentList();
+        createOurPicksList();
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +56,9 @@ public class HomeChildFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         createUserLikingRecyclerView();
         createUserRecentRecyclerView();
+        createOurRecyclerView();
     }
+
 
 
     private void createUserLikingList() {
@@ -66,12 +75,23 @@ public class HomeChildFragment extends Fragment {
     private void createUserRecentList() {
         recentList = new ArrayList<>();
 
-        recentList.add(new CreateSong(R.drawable.app_logo, "Waiting For Tomorrow"));
-        recentList.add(new CreateSong(R.drawable.app_logo, "Gold Skies"));
-        recentList.add(new CreateSong(R.drawable.app_logo, "Never Let Me Go"));
-        recentList.add(new CreateSong(R.drawable.app_logo, "Happy Now"));
-        recentList.add(new CreateSong(R.drawable.app_logo, "Titanium"));
-        recentList.add(new CreateSong(R.drawable.app_logo, "Sing Me To Sleep"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "The Ocean"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "Crazy"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "Pikachu"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "The Half"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "Tsunami"));
+        recentList.add(new CreateSong(R.drawable.app_logo, "Alone"));
+    }
+
+    private void createOurPicksList() {
+        ourList=new ArrayList<>();
+
+        ourList.add(new CreateSong(R.drawable.app_logo, "Faded"));
+        ourList.add(new CreateSong(R.drawable.app_logo, "All Is Well"));
+        ourList.add(new CreateSong(R.drawable.app_logo, "Story Of My Life"));
+        ourList.add(new CreateSong(R.drawable.app_logo, "Hands To Myself"));
+        ourList.add(new CreateSong(R.drawable.app_logo, "Rap God"));
+        ourList.add(new CreateSong(R.drawable.app_logo, "Alone"));
     }
 
     private void createUserLikingRecyclerView() {
@@ -87,10 +107,20 @@ public class HomeChildFragment extends Fragment {
     private void createUserRecentRecyclerView() {
         recentRecyclerView = view.findViewById(R.id.user_recent_RV);
         recentRecyclerView.setHasFixedSize(true);
-        rAdapter = new SongAdapter(recentList);
+        rAdapter = new OtherSongsAdapter(recentList);
 
         recentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         recentRecyclerView.setAdapter(rAdapter);
     }
+    private void createOurRecyclerView() {
+        ourRecyclerView = view.findViewById(R.id.our_RV);
+        ourRecyclerView.setHasFixedSize(true);
+        oAdapter=new OtherSongsAdapter(ourList);
+
+        ourRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        ourRecyclerView.setAdapter(oAdapter);
+    }
+
 }
