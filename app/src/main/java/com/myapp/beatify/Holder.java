@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class Holder extends Fragment {
     View view;
     BottomNavigationView bottomNavigationView;
     private static Fragment childFragment;
+    private static FragmentManager fragmentManager;
     private DrawerLayout drawerLayout;
 //    private static FragmentTransaction transaction;
 
@@ -44,16 +46,17 @@ public class Holder extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toolbar toolbar=view.findViewById(R.id.toolbar);
-        drawerLayout=view.findViewById(R.id.homeFrag);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        drawerLayout = view.findViewById(R.id.homeFrag);
 
-        ActionBarDrawerToggle actionBarDrawerToggle=new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         bottomNavigationView = view.findViewById(R.id.bottom_nav_bar);
         //set default as home page
-        childFragment = new HomeChildFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.frag_holder, childFragment).commit();
+        //childFragment =new HomeChildFragment();
+        fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.frag_holder, new HomeChildFragment(), "home").addToBackStack("holder").commit();
 
         switchPage();
     }
@@ -66,20 +69,58 @@ public class Holder extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        childFragment = new HomeChildFragment();
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("search") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("search")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("liked") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("liked")).commit();
+                        }
                         break;
                     case R.id.nav_search:
-                        childFragment = new SearchChildFragment();
+                        //childFragment = new SearchChildFragment();
+                        if (fragmentManager.findFragmentByTag("search") != null) {
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("search")).commit();
+                        } else {
+                            fragmentManager.beginTransaction().add(R.id.frag_holder, new SearchChildFragment(), "search").addToBackStack("holder").commit();
+                        }
+
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("liked") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("liked")).commit();
+                        }
+
                         break;
                     case R.id.nav_liked:
-                        childFragment = new FavouritesChildFragment();
+                        if (fragmentManager.findFragmentByTag("liked") != null) {
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("liked")).commit();
+                        } else {
+                            fragmentManager.beginTransaction().add(R.id.frag_holder, new FavouritesChildFragment(), "liked").addToBackStack("holder").commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("search") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("search")).commit();
+                        }
+
                         break;
                     default:
                         Toast.makeText(getContext(), "oops :(", Toast.LENGTH_SHORT).show();
                 }
 
-                getChildFragmentManager().beginTransaction().replace(R.id.frag_holder,
-                        childFragment).commit();
+//                getChildFragmentManager().beginTransaction().replace(R.id.frag_holder,
+//                        childFragment).commit();
 
                 return true;
             }
@@ -90,3 +131,16 @@ public class Holder extends Fragment {
 }//class ends
 
 
+// childFragment = new HomeChildFragment();
+//!(fragmentManager.findFragmentByTag("home").isVisible())
+//&& fragmentManager.findFragmentByTag("search").isVisible()
+//fragmentManager.findFragmentByTag("liked") != null &&
+//!(fragmentManager.findFragmentByTag("search").isVisible()) &&
+// if( fragmentManager.findFragmentByTag("search") ==null)
+//                        {
+//
+//&& fragmentManager.findFragmentByTag("home").isVisible()                        }
+//&& fragmentManager.findFragmentByTag("liked").isVisible()
+//!(fragmentManager.findFragmentByTag("liked").isVisible()) &&
+//&& fragmentManager.findFragmentByTag("search").isVisible()
+//
