@@ -42,7 +42,6 @@ public class HomeChildFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +57,6 @@ public class HomeChildFragment extends Fragment {
         createUserRecentRecyclerView();
         createOurRecyclerView();
     }
-
 
 
     private void createUserLikingList() {
@@ -84,7 +82,7 @@ public class HomeChildFragment extends Fragment {
     }
 
     private void createOurPicksList() {
-        ourList=new ArrayList<>();
+        ourList = new ArrayList<>();
 
         ourList.add(new CreateSong(R.drawable.app_logo, "Faded"));
         ourList.add(new CreateSong(R.drawable.app_logo, "All Is Well"));
@@ -113,10 +111,11 @@ public class HomeChildFragment extends Fragment {
 
         recentRecyclerView.setAdapter(rAdapter);
     }
+
     private void createOurRecyclerView() {
         ourRecyclerView = view.findViewById(R.id.our_RV);
         ourRecyclerView.setHasFixedSize(true);
-        oAdapter=new OtherSongsAdapter(ourList);
+        oAdapter = new OtherSongsAdapter(ourList);
 
         ourRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 

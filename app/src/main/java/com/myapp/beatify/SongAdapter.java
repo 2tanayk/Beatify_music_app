@@ -23,8 +23,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view= LayoutInflater.from(parent.getContext()).inflate(R.layout.create_user_liking,parent,false);
-        MyViewHolder myViewHolder=new MyViewHolder(view);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_user_liking, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }
 
@@ -39,8 +39,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         return mSongList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
 
