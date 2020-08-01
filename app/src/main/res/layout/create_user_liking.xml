@@ -2,10 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/user_liking_CV"
-    android:layout_width="match_parent"
+    android:layout_width="260dp"
     android:layout_height="260dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="#1A336BA3"
     app:cardElevation="5dp"
     app:cardCornerRadius="5dp">
 
@@ -26,7 +25,6 @@
             android:id="@+id/nameTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1A336BA3"
             android:fontFamily="@font/artifika"
             android:gravity="center"
             android:text="Waiting For Tomorrow"

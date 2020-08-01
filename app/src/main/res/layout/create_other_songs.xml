@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/create_other_RV"
     style="@style/half"
-    android:layout_width="match_parent"
+    android:layout_width="200dp"
     android:layout_height="190dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="#1A336BA3"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp">
 
@@ -26,7 +25,6 @@
             android:id="@+id/recent_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1A336BA3"
             android:fontFamily="@font/artifika"
             android:gravity="center"
             android:text="Shape Of You"
