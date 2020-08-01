@@ -1,25 +1,25 @@
 package com.myapp.beatify;
 
 public class CreateSong {
-    private int img;
+    private String imgURL;
     private String txt;
 //    private int img;
 
-    public CreateSong(int img, String txt) {
-        this.img = img;
+    public CreateSong(String imgURL, String txt) {
+        this.imgURL = imgURL;
         this.txt = txt;
     }
 
-    public void setImg(String url) {
-        this.img = img;
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 
     public void setTxt(String txt) {
         this.txt = txt;
     }
 
-    public int getImg() {
-        return img;
+    public String getImgURL() {
+        return imgURL;
     }
 
     public String getTxt() {

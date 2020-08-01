@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.MyViewHolder> {
@@ -22,14 +24,15 @@ public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view= LayoutInflater.from(parent.getContext()).inflate(R.layout.create_other_songs,parent,false);
-        MyViewHolder myViewHolder=new MyViewHolder(view);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_other_songs, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.imageView.setImageResource(mSongList.get(position).getImg());
+//        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
+        Glide.with(holder.imageView.getContext()).load(mSongList.get(position).getImgURL()).into(holder.imageView);
         holder.textView.setText(mSongList.get(position).getTxt());
     }
 
@@ -38,8 +41,7 @@ public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.My
         return mSongList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
 
