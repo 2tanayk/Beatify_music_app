@@ -72,5 +72,6 @@ public class PreferencesFragment extends Fragment {
             }//onItemClick ends
         });
 
+
     }//createRecyclerView ends
 }//class ends

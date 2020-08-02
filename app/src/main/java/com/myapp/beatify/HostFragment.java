@@ -15,13 +15,17 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class Holder extends Fragment {
+public class HostFragment extends Fragment {
     //Fragment for homepage
     View view;
+    public static LinearLayout bottom;
+    public static TextView bTxt;
     BottomNavigationView bottomNavigationView;
     private static Fragment childFragment;
     private static FragmentManager fragmentManager;
@@ -48,6 +52,8 @@ public class Holder extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         drawerLayout = view.findViewById(R.id.homeFrag);
+        bottom=view.findViewById(R.id.bottomLL);
+        bTxt=view.findViewById(R.id.bottomTxt);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);

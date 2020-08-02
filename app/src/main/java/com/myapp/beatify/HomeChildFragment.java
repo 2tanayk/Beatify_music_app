@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,9 @@ public class HomeChildFragment extends Fragment {
     private RecyclerView recentRecyclerView;
     private RecyclerView ourRecyclerView;
 
-    private RecyclerView.Adapter tAdapter;
-    private RecyclerView.Adapter rAdapter;
-    private RecyclerView.Adapter oAdapter;
+    private SongAdapter tAdapter;
+    private OtherSongsAdapter rAdapter;
+    private OtherSongsAdapter oAdapter;
 
 //    private RecyclerView.LayoutManager tLayoutManager;
 
@@ -100,6 +101,17 @@ public class HomeChildFragment extends Fragment {
         tRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         tRecyclerView.setAdapter(tAdapter);
+
+        tAdapter.setOnItemClickListener(new SongAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                HostFragment.bottom.setVisibility(View.VISIBLE);
+//                HostFragment.bTxt.setText("");
+            }
+        });
+
+
     }
 
     private void createUserRecentRecyclerView() {
@@ -110,6 +122,14 @@ public class HomeChildFragment extends Fragment {
         recentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         recentRecyclerView.setAdapter(rAdapter);
+
+        rAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void createOurRecyclerView() {
@@ -120,6 +140,13 @@ public class HomeChildFragment extends Fragment {
         ourRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         ourRecyclerView.setAdapter(oAdapter);
+
+//        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 }

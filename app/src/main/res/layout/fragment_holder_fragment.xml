@@ -6,40 +6,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Holder"
+    tools:context=".HostFragment"
     tools:openDrawer="start">
 
-
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#99E8F4"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/frag_holder"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#99E8F4"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <FrameLayout
+                android:id="@+id/frag_holder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bottom_nav_bar"
+                android:layout_marginTop="?attr/actionBarSize">
+
+
+            </FrameLayout>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav_bar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="1dp"
+                android:background="?android:attr/windowBackground"
+                app:menu="@menu/bottom_navigation" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomLL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_above="@+id/bottom_nav_bar" />
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:visibility="gone">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav_bar"
-            android:layout_width="match_parent"
-            android:layout_height="50sp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="1dp"
-            android:background="?android:attr/windowBackground"
-            app:menu="@menu/bottom_navigation" />
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/app_logo"
+                android:id="@+id/bottomImg"/>
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="Waiting For Tomorrow"
+                android:textSize="20dp"
+                android:id="@+id/bottomTxt"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_baseline_play_arrow_24" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

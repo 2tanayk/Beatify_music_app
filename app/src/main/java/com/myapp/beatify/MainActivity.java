@@ -2,7 +2,6 @@ package com.myapp.beatify;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
@@ -31,6 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void onGenreClicked()
     {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container,new Holder(),null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container,new HostFragment(),null).commit();
     }
 }//class ends

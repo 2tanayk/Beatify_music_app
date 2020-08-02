@@ -15,6 +15,16 @@ import java.util.List;
 
 public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.MyViewHolder> {
     private List<CreateSong> mSongList;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnClickListener(OnItemClickListener listener)
+    {
+        mListener=listener;
+    }
 
     public OtherSongsAdapter(List<CreateSong> mSongList) {
         this.mSongList = mSongList;
@@ -25,7 +35,7 @@ public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.My
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_other_songs, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
+        MyViewHolder myViewHolder = new MyViewHolder(view,mListener);
         return myViewHolder;
     }
 
@@ -45,10 +55,22 @@ public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.My
         public ImageView imageView;
         public TextView textView;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.recent_img);
             this.textView = itemView.findViewById(R.id.recent_txt);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+
+                    if(position==RecyclerView.NO_POSITION)
+                    {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
     }
 }
