@@ -107,7 +107,6 @@ public class HomeChildFragment extends Fragment {
             public void onItemClick(int position) {
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 HostFragment.bottom.setVisibility(View.VISIBLE);
-//                HostFragment.bTxt.setText("");
             }
         });
 
