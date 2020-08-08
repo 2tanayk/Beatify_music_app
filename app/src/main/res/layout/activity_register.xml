@@ -3,19 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1AFFFFFF"
-    android:backgroundTint="#336BA3"
+    android:background="#FFFFFF"
+    android:backgroundTint="#1A336BA3"
     android:gravity="center_horizontal"
     android:onClick="register"
     android:orientation="vertical"
-    android:padding="20dp"
     tools:context=".RegisterActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarRegister"/>
 
     <EditText
         android:id="@+id/emailEditText2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="200dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/rounded_corner"
         android:elevation="10dp"
         android:gravity="center_vertical"
@@ -29,7 +33,9 @@
         android:id="@+id/passwordEditText2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/rounded_corner"
         android:elevation="10dp"
         android:gravity="center_vertical"
