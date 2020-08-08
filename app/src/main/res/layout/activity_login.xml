@@ -1,78 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:backgroundTint="#1A336BA3"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".LoginActivity">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/emailEditText"
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="200dp"
-        android:background="@drawable/rounded_corner"
-        android:elevation="10dp"
-        android:gravity="center_vertical"
-        android:hint="Enter your email id...."
-        android:inputType="textEmailAddress"
-        android:padding="5dp"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/rounded_corner"
-        android:elevation="10dp"
-        android:gravity="center_vertical"
-        android:hint="Enter your password...."
-        android:inputType="textPassword"
-        android:padding="5dp"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/forgotTextView"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:background="#ffffff"
+        android:background="#FFFFFF"
         android:backgroundTint="#1A336BA3"
-        android:elevation="10dp"
-        android:onClick="forgotPassword"
-        android:text="Forgot password?"
-        android:textColor="#000000" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".LoginActivity">
 
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/rounded_corner"
-        android:elevation="10dp"
-        android:onClick="login"
-        android:text="Login"
-        android:textColor="@android:color/background_dark"
-        android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/registerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#ffffff"
-        android:backgroundTint="#1A336BA3"
-        android:elevation="10dp"
-        android:onClick="registerPage"
-        android:text="New User?Register!"
-        android:textColor="#000000" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/rounded_corner"
+            android:elevation="10dp"
+            android:gravity="center_vertical"
+            android:hint="Enter your email id...."
+            android:inputType="textEmailAddress"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corner"
+            android:elevation="10dp"
+            android:gravity="center_vertical"
+            android:hint="Enter your password...."
+            android:inputType="textPassword"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/forgotTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="#ffffff"
+            android:backgroundTint="#1A336BA3"
+            android:elevation="10dp"
+            android:onClick="forgotPassword"
+            android:text="Forgot password?"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corner"
+            android:elevation="10dp"
+            android:onClick="login"
+            android:text="Login"
+            android:textColor="@android:color/background_dark"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/registerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#ffffff"
+            android:backgroundTint="#1A336BA3"
+            android:elevation="10dp"
+            android:onClick="registerPage"
+            android:text="New User?Register!"
+            android:textColor="#000000" />
+
+    </LinearLayout>
+</ScrollView>
