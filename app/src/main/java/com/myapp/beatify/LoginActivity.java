@@ -16,14 +16,24 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-   //Login page activity"
+    //Login page activity"
 
     private EditText emailTxt;
     private EditText passwordTxt;
 
     public FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mAuth != null) {
+            currentUser = mAuth.getCurrentUser();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
