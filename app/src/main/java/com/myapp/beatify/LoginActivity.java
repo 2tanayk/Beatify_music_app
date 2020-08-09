@@ -30,10 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth != null) {
-            currentUser = mAuth.getCurrentUser();
+        if (mAuth.getCurrentUser() != null) {
+           finish();
+           startActivity(new Intent(this,MainActivity.class));
         }
-    }
+    }//onStart ends
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
