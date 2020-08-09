@@ -57,23 +57,24 @@
             android:background="#FFFFFF"
             android:orientation="horizontal"
             android:padding="5dp"
+            android:transitionName="bottom_player_transition"
             android:visibility="gone">
 
             <ImageView
+                android:id="@+id/bottomImg"
                 android:layout_width="65dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/app_logo"
-                android:id="@+id/bottomImg"/>
+                android:src="@drawable/app_logo" />
 
             <TextView
+                android:id="@+id/bottomTxt"
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:text="Waiting For Tomorrow"
-                android:textSize="20dp"
-                android:id="@+id/bottomTxt"/>
+                android:textSize="20dp" />
 
             <ImageView
                 android:layout_width="match_parent"

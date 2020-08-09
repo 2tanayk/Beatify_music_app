@@ -5,12 +5,15 @@
         <item name="colorPrimary">#00FFFF</item>
         <item name="colorPrimaryDark">#1A0091EA</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="half">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

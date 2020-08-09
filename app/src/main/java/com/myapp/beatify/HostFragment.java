@@ -1,15 +1,17 @@
 package com.myapp.beatify;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ public class HostFragment extends Fragment {
     private static Fragment childFragment;
     private static FragmentManager fragmentManager;
     private DrawerLayout drawerLayout;
+    private static TextView bottomText;
 //    private static FragmentTransaction transaction;
 
     @Override
@@ -52,8 +55,9 @@ public class HostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         drawerLayout = view.findViewById(R.id.homeFrag);
-        bottom=view.findViewById(R.id.bottomLL);
-        bTxt=view.findViewById(R.id.bottomTxt);
+        bottom = view.findViewById(R.id.bottomLL);
+        bTxt = view.findViewById(R.id.bottomTxt);
+        bottomText = view.findViewById(R.id.bottomTxt);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -63,6 +67,15 @@ public class HostFragment extends Fragment {
         //childFragment =new HomeChildFragment();
         fragmentManager = getChildFragmentManager();
         fragmentManager.beginTransaction().add(R.id.frag_holder, new HomeChildFragment(), "home").addToBackStack("holder").commit();
+
+        bottomText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), MediaPlayerActivity.class);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), bottom, ViewCompat.getTransitionName(bottom));
+                startActivity(intent, options.toBundle());
+            }
+        });
 
         switchPage();
     }
@@ -132,6 +145,17 @@ public class HostFragment extends Fragment {
             }
         });
     }
+
+//    public void openMediaPlayer(View view) {
+//        try {
+//
+////            Toast.makeText(getContext(), "oops:(", Toast.LENGTH_SHORT).show();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Toast.makeText(getContext(), "oops:(", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 
 }//class ends
