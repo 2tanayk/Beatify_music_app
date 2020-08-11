@@ -24,15 +24,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTxt;
     private EditText passwordTxt;
 
-    public FirebaseAuth mAuth;
+    public static FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
     @Override
     protected void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
-           finish();
-           startActivity(new Intent(this,MainActivity.class));
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }//onStart ends
 

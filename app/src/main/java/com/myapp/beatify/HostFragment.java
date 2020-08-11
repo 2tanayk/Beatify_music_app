@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -22,13 +23,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
-public class HostFragment extends Fragment {
+public class HostFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     //Fragment for homepage
     View view;
     public static LinearLayout bottom;
     public static TextView bTxt;
-    BottomNavigationView bottomNavigationView;
+    protected BottomNavigationView bottomNavigationView;
+    protected NavigationView navigationView;
+
     private static Fragment childFragment;
     private static FragmentManager fragmentManager;
     private DrawerLayout drawerLayout;
@@ -54,14 +58,19 @@ public class HostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+
         drawerLayout = view.findViewById(R.id.homeFrag);
+        navigationView = view.findViewById(R.id.nav_view);
+
         bottom = view.findViewById(R.id.bottomLL);
         bTxt = view.findViewById(R.id.bottomTxt);
         bottomText = view.findViewById(R.id.bottomTxt);
 
+
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
         bottomNavigationView = view.findViewById(R.id.bottom_nav_bar);
         //set default as home page
         //childFragment =new HomeChildFragment();
@@ -76,6 +85,7 @@ public class HostFragment extends Fragment {
                 startActivity(intent, options.toBundle());
             }
         });
+        navigationView.setNavigationItemSelectedListener(this);
 
         switchPage();
     }
@@ -145,6 +155,25 @@ public class HostFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_mode:
+                break;
+            case R.id.nav_settings:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_logout:
+                // Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                MainActivity.logOut();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
 //    public void openMediaPlayer(View view) {
 //        try {
