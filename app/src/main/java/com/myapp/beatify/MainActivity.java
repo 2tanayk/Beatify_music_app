@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         Intent mI = getIntent();
 
-        int s = mI.getIntExtra("STATUS", 0);
+        int s = mI.getIntExtra("STATUS", 1);
 
         fragmentManager = getSupportFragmentManager();
 
