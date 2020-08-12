@@ -162,6 +162,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
             case R.id.nav_mode:
                 break;
             case R.id.nav_settings:
+                MainActivity.hideHost();
                 break;
             case R.id.nav_share:
                 break;

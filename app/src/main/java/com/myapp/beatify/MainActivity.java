@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public static FragmentManager fragmentManager;
     private static final String COLLECTION_TITLE = "Music";
     public static AppCompatActivity activity = null;
+    private static SettingsFragment test;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Map<String, Object> note = new HashMap<>();
@@ -40,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
 //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             //PreferencesFragment preferencesFragment = new PreferencesFragment();
             if (s == 0) {
-                fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), null).commit();
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), "Preferences").commit();
             } else {
-                fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), null).commit();
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
             }
 //            fragmentTransaction.commit();
             createMusicCollection();
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }//onCreate ends
 
     public static void onGenreClicked() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
     }
 
     private void createMusicCollection() {
@@ -64,4 +65,27 @@ public class MainActivity extends AppCompatActivity {
         activity.startActivity(new Intent(activity, LoginActivity.class));
     }
 
+    public static void hideHost() {
+        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Host")).commit();
+
+        if (fragmentManager.findFragmentByTag("Settings") != null) {
+            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Settings")).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_container, new SettingsFragment(), "Settings").addToBackStack(null).commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        test = (SettingsFragment) fragmentManager.findFragmentByTag("Settings");
+        if (test != null && test.isVisible()) {
+            //DO STUFF
+            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Settings")).commit();
+            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Host")).commit();
+        } else {
+            //Whatever
+            super.onBackPressed();
+        }
+
+    }
 }//class ends
