@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         activity = this;
+        Intent mI = getIntent();
+
+        int s = mI.getIntExtra("STATUS", 0);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -36,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
 //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             //PreferencesFragment preferencesFragment = new PreferencesFragment();
-            fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), null).commit();
+            if (s == 0) {
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), null).commit();
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), null).commit();
+            }
 //            fragmentTransaction.commit();
             createMusicCollection();
         }//if ends
