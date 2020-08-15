@@ -1,12 +1,22 @@
 package com.myapp.beatify;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -19,7 +29,19 @@ public class MainActivity extends AppCompatActivity {
     public static AppCompatActivity activity = null;
     private static SettingsFragment test;
 
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String USERNAME = "username";
+    public static final String PREFERENCE = "preference";
+    private SharedPreferences sharedPreferences;
+
+
+    protected static String username = "";
+    protected String preferences = "";
+    public String recordPref;
+    //Initialized a reference of CF
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private Map<String, Object> user = new HashMap<>();
     private Map<String, Object> note = new HashMap<>();
 
     @Override
@@ -30,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
         Intent mI = getIntent();
 
         int s = mI.getIntExtra("STATUS", 1);
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        if (s == 0) {
+            username = mI.getStringExtra("USERNAME");
+        } else {
+            username = sharedPreferences.getString(USERNAME, "");
+
+//            Toast.makeText(this, "" + sharedPreferences.getString(PREFERENCE, "nope"), Toast.LENGTH_SHORT).show();
+        }
 
         fragmentManager = getSupportFragmentManager();
 
@@ -46,18 +77,59 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
             }
 //            fragmentTransaction.commit();
-            createMusicCollection();
+//            createMusicCollection();
         }//if ends
     }//onCreate ends
 
+
+    public void setRecordPref(String recordPref) {
+        this.recordPref = recordPref;
+
+        createUserDoc();
+    }
+
+    private void createUserDoc() {
+        user.put("username", username);
+        user.put("preference", recordPref);
+
+        writeToFirestore();
+    }
+
+
+    private void writeToFirestore() {
+        db.collection("Users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("Document added", documentReference.getId() + "");
+                        saveDataLocally();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Error adding document", e);
+            }
+        });
+    }
+
+    private void saveDataLocally() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USERNAME, username);
+        editor.putString(PREFERENCE, recordPref);
+        editor.apply();
+    }
+
     public static void onGenreClicked() {
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
-    }
-
-    private void createMusicCollection() {
-        note.put("Title1", "");
 
     }
+
+
+    //    private void createMusicCollection() {
+//        note.put("Title1", "");
+//
+//    }
 
     public static void logOut() {
         FirebaseAuth.getInstance().signOut();

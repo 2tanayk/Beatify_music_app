@@ -17,6 +17,9 @@ import java.util.List;
 
 public class PreferencesFragment extends Fragment {
     //Fragment FOR music preference page
+//    private List<String> pref;
+
+
     private List<CreatePreferences> clist;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -66,9 +69,13 @@ public class PreferencesFragment extends Fragment {
         mAdapter.setOnItemClickListener(new PreferencesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                posn = position;
-             MainActivity.onGenreClicked();
-             //Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
+//                posn = position;
+
+//                recordPref = clist.get(position).getTxt();
+                ((MainActivity) getActivity()).setRecordPref(clist.get(position).getTxt());
+
+                MainActivity.onGenreClicked();
+//                Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
             }//onItemClick ends
         });
 

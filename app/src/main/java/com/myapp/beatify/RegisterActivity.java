@@ -21,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText emailTxt;
     private EditText passwordTxt;
+    private String username = "";
 
     public FirebaseAuth mAuth;
 
@@ -47,8 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
     }//onBackPressed ends
 
     public void register(View v) {
-        String emailId = emailTxt.getText().toString();
-        String password = passwordTxt.getText().toString();
+        String emailId = emailTxt.getText().toString().trim();
+        String password = passwordTxt.getText().toString().trim();
+
+        username = emailId.substring(0, emailId.indexOf('@'));
 
         if (TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password)) {
             Toast.makeText(RegisterActivity.this, "One or more fields are empty!", Toast.LENGTH_SHORT).show();
@@ -70,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Intent n = new Intent(RegisterActivity.this, MainActivity.class);
                     n.putExtra("STATUS", 0);
+                    n.putExtra("USERNAME", username + "");
                     startActivity(n);
                     finish();
                 }//if ends

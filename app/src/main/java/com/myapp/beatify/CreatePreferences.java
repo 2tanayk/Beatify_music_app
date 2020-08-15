@@ -10,7 +10,7 @@ public class CreatePreferences {
         this.img = img;
     }//constructor ends
 
-  //setter methods
+    //setter methods
     public void setTxt(String txt) {
         this.txt = txt;
     }//setTxt ends
