@@ -29,5 +29,12 @@
         android:text="Tanay Kamath"
         android:textSize="30sp" />
 
+    <Button
+        android:id="@+id/updateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Update" />
+
 
 </LinearLayout>

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -17,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String USERNAME = "username";
     public static final String PREFERENCE = "preference";
-    private SharedPreferences sharedPreferences;
 
+    private SharedPreferences sharedPreferences;
 
     protected static String username = "";
     protected String preferences = "";
@@ -57,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
         if (s == 0) {
             username = mI.getStringExtra("USERNAME");
         } else {
-            username = sharedPreferences.getString(USERNAME, "");
+            username = sharedPreferences.getString(USERNAME, null);
+
+            if (username == null) {
+                readFromFirestore();
+            }
 
 //            Toast.makeText(this, "" + sharedPreferences.getString(PREFERENCE, "nope"), Toast.LENGTH_SHORT).show();
         }
@@ -81,12 +85,46 @@ public class MainActivity extends AppCompatActivity {
         }//if ends
     }//onCreate ends
 
+    private void readFromFirestore() {
+//        String username="";
+//        String preferences = "";
+
+        DocumentReference userDoc = db.collection("Users")
+                .document("" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        username = document.getString("username");
+                        recordPref = document.getString("preferences");
+
+                        saveDataLocally();
+//                        Log.i("LOGGER","First "+document.getString("first"));
+//                        Log.i("LOGGER","Last "+document.getString("last"));
+//                        Log.i("LOGGER","Born "+document.getString("born"));
+                    } else {
+                        Log.d("Result", "No such document");
+                    }
+                } else {
+                    Log.d("Result", task.getException().toString());
+                }
+
+            }
+        });
+
+
+    }
+
 
     public void setRecordPref(String recordPref) {
         this.recordPref = recordPref;
 
         createUserDoc();
     }
+
 
     private void createUserDoc() {
         user.put("username", username);
@@ -98,13 +136,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void writeToFirestore() {
         db.collection("Users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document("" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Document added", documentReference.getId() + "");
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Info", "DocumentSnapshot successfully written!");
                         saveDataLocally();
                     }
+
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d("Document added", documentReference.getId() + "");
+//                        saveDataLocally();
+//                    }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
