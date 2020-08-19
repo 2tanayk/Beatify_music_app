@@ -14,35 +14,44 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     //MainActivity which acts as a fragment holder
+
+
     public static FragmentManager fragmentManager;
     private static final String COLLECTION_TITLE = "Music";
     public static AppCompatActivity activity = null;
     private static SettingsFragment test;
 
     public static final String SHARED_PREFS = "sharedPrefs";
+
     public static final String USERNAME = "username";
     public static final String PREFERENCE = "preference";
+    public static final String IMG_URL = "image_url";
 
     private SharedPreferences sharedPreferences;
 
     protected static String username = "";
     protected String preferences = "";
     public String recordPref;
+    public String userDpURL;
     //Initialized a reference of CF
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Map<String, Object> user = new HashMap<>();
     private Map<String, Object> note = new HashMap<>();
+
+    public static int s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         Intent mI = getIntent();
 
-        int s = mI.getIntExtra("STATUS", 1);
+        s = mI.getIntExtra("STATUS", 1);
         sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         if (s == 0) {
@@ -62,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             if (username == null) {
                 readFromFirestore();
             }
-
 //            Toast.makeText(this, "" + sharedPreferences.getString(PREFERENCE, "nope"), Toast.LENGTH_SHORT).show();
         }
 
@@ -98,8 +106,10 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null) {
+
                         username = document.getString("username");
                         recordPref = document.getString("preferences");
+                        userDpURL = document.getString("image_url");
 
                         saveDataLocally();
 //                        Log.i("LOGGER","First "+document.getString("first"));
@@ -129,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
     private void createUserDoc() {
         user.put("username", username);
         user.put("preference", recordPref);
+        user.put("image_url", null);
+        user.put("last logged in", new Timestamp(new Date()));
 
         writeToFirestore();
     }
@@ -160,8 +172,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveDataLocally() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.putString(USERNAME, username);
         editor.putString(PREFERENCE, recordPref);
+        editor.putString(IMG_URL, userDpURL);
+
         editor.apply();
     }
 
