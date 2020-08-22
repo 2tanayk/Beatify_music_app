@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +23,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText emailTxt;
     private EditText passwordTxt;
+    private Button registerBtn;
+
     private String username = "";
+    private ProgressBar progressBar;
 
     public FirebaseAuth mAuth;
 
@@ -38,8 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        emailTxt = (EditText) findViewById(R.id.emailEditText2);
-        passwordTxt = (EditText) findViewById(R.id.passwordEditText2);
+        emailTxt = findViewById(R.id.emailEditText2);
+        passwordTxt = findViewById(R.id.passwordEditText2);
+        progressBar = findViewById(R.id.registerProgressBar);
+        registerBtn = findViewById(R.id.registerBtn);
     }//onCreate ends
 
     @Override
@@ -48,18 +55,28 @@ public class RegisterActivity extends AppCompatActivity {
     }//onBackPressed ends
 
     public void register(View v) {
+        progressBar.setVisibility(View.VISIBLE);
+        registerBtn.setEnabled(false);
+
+
         String emailId = emailTxt.getText().toString().trim();
         String password = passwordTxt.getText().toString().trim();
 
-        username = emailId.substring(0, emailId.indexOf('@'));
 
         if (TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password)) {
+            progressBar.setVisibility(View.GONE);
+            registerBtn.setEnabled(true);
+
             Toast.makeText(RegisterActivity.this, "One or more fields are empty!", Toast.LENGTH_SHORT).show();
         }//if ends
         else if (password.length() < 6) {
+            progressBar.setVisibility(View.GONE);
+            registerBtn.setEnabled(true);
+
             Toast.makeText(RegisterActivity.this, "Password should be min. 6 characters", Toast.LENGTH_SHORT).show();
         }//else-if ends
         else {
+            username = emailId.substring(0, emailId.indexOf('@'));
             registerUser(emailId, password);
         }//else ends
     }//register ends
@@ -69,6 +86,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+                    registerBtn.setEnabled(true);
+
                     Toast.makeText(RegisterActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
 
                     Intent n = new Intent(RegisterActivity.this, MainActivity.class);
@@ -78,6 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
                     finish();
                 }//if ends
                 else {
+                    progressBar.setVisibility(View.GONE);
+                    registerBtn.setEnabled(true);
                     Toast.makeText(RegisterActivity.this, "Failed :(", Toast.LENGTH_SHORT).show();
                 }//else ends
             }//onComplete ends

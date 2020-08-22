@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,9 +26,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailTxt;
     private EditText passwordTxt;
+    private ProgressBar progressBar;
+    private Button loginBtn;
 
     public static FirebaseAuth mAuth;
-    FirebaseUser currentUser;
+//    FirebaseUser currentUser;
 
     @Override
     protected void onStart() {
@@ -43,8 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Intent i = getIntent();
 
-        emailTxt = (EditText) findViewById(R.id.emailEditText);
-        passwordTxt = (EditText) findViewById(R.id.passwordEditText);
+        emailTxt = findViewById(R.id.emailEditText);
+        passwordTxt = findViewById(R.id.passwordEditText);
+        progressBar = findViewById(R.id.loginProgressBar);
+        loginBtn = findViewById(R.id.loginBtn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -63,13 +70,21 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void login(View v) {
+        progressBar.setVisibility(View.VISIBLE);
+        loginBtn.setEnabled(false);
+
         String emailId = emailTxt.getText().toString();
         String password = passwordTxt.getText().toString();
+
         if (TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password)) {
+            progressBar.setVisibility(View.GONE);
+            loginBtn.setEnabled(true);
+
             Toast.makeText(LoginActivity.this, "One or more fields are empty!", Toast.LENGTH_SHORT).show();
         }//if ends
         else {
             loginUser(emailId, password);
+
         }//else ends
     }//login ends
 
@@ -77,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(emailId, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
+                progressBar.setVisibility(View.GONE);
+                loginBtn.setEnabled(true);
                 Toast.makeText(LoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
 
                 Intent b = new Intent(LoginActivity.this, MainActivity.class);
@@ -84,6 +101,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(b);
                 finish();
             }//onSuccess ends
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.GONE);
+                loginBtn.setEnabled(true);
+
+                Toast.makeText(LoginActivity.this, "Failed :(", Toast.LENGTH_SHORT).show();
+                Log.e("Error", e.toString());
+            }
         });
     }//loginUser ends
 
