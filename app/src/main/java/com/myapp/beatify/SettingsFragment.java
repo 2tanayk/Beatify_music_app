@@ -161,7 +161,7 @@ public class SettingsFragment extends Fragment {
 
     private void uploadToStorage() {
         if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
 
             fileReference.putFile(mImageUri)
@@ -170,10 +170,24 @@ public class SettingsFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(getActivity(), "Update successful", Toast.LENGTH_LONG).show();
 
-                            dbImageUri = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                            Toast.makeText(getActivity(), "Image uploaded!", Toast.LENGTH_SHORT).show();
+//                            dbImageUri = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+//                            Toast.makeText(getActivity(), "Image uploaded!", Toast.LENGTH_SHORT).show();
 
-                            updateUserDP();
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    dbImageUri = uri.toString();
+                                    updateUserDP();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Update failed :(", e.toString() + "");
+                                    Toast.makeText(getActivity(), "Oops :(", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
 //                            saveDataLocally(1);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -181,7 +195,6 @@ public class SettingsFragment extends Fragment {
                 public void onFailure(@NonNull Exception e) {
                     Log.e("Error", e.toString());
                     Toast.makeText(getActivity(), "Oops :(", Toast.LENGTH_SHORT).show();
-
                 }
             });
 
@@ -211,7 +224,6 @@ public class SettingsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Updated!", Toast.LENGTH_SHORT).show();
                             saveDataLocally(0);
-
                         } else {
                             Log.e("Oops", Objects.requireNonNull(task.getException()).toString());
                         }
