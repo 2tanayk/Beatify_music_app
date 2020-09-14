@@ -24,24 +24,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class MainActivity extends AppCompatActivity {
     //MainActivity which acts as a fragment holder
 
 
-    public static FragmentManager fragmentManager;
-    private static final String COLLECTION_TITLE = "Music";
-    public static AppCompatActivity activity = null;
-    private static SettingsFragment test;
+    private FragmentManager fragmentManager;
+    //private final String COLLECTION_TITLE = "Music";
+    //public AppCompatActivity activity = null;
+    private SettingsFragment test;//
 
-    public static final String SHARED_PREFS = "sharedPrefs";
+    public final String SHARED_PREFS = "sharedPrefs";
 
-    public static final String USERNAME = "username";
-    public static final String PREFERENCE = "preference";
-    public static final String IMG_URL = "image_url";
+    public final String USERNAME = "username";
+    public final String PREFERENCE = "preference";
+    public final String IMG_URL = "image_url";
 
     private SharedPreferences sharedPreferences;
 
-    protected static String username = "";
+    protected String username = "";//
     protected String preferences = "";
     public String recordPref;
     public String userDpURL;
@@ -49,15 +50,15 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Map<String, Object> user = new HashMap<>();
-    private Map<String, Object> note = new HashMap<>();
+    private Map<String, Object> musicDoc = new HashMap<>();
 
-    public static int s;
+    public int s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        activity = this;
+        //activity = this;
         Intent mI = getIntent();
 
         s = mI.getIntExtra("STATUS", 1);
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 //            fragmentTransaction.commit();
 //            createMusicCollection();
         }//if ends
+        //createMusicCollection();
+
     }//onCreate ends
 
     private void readFromFirestore() {
@@ -180,24 +183,19 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public static void onGenreClicked() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
-
+    public void onGenreClicked() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), "Host").commit();
     }
 
 
-    //    private void createMusicCollection() {
-//        note.put("Title1", "");
-//
-//    }
-
-    public static void logOut() {
+    public void logOut() {
         FirebaseAuth.getInstance().signOut();
-        activity.finish();
-        activity.startActivity(new Intent(activity, LoginActivity.class));
+        //activity.finish();
+        finish();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
-    public static void hideHost() {
+    public void hideHost() {
         fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Host")).commit();
 
         if (fragmentManager.findFragmentByTag("Settings") != null) {
@@ -206,6 +204,11 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.fragment_container, new SettingsFragment(), "Settings").addToBackStack(null).commit();
         }
     }
+
+//    private void createMusicCollection() {
+//        musicDoc.put("Title", "");
+//
+//    }
 
     @Override
     public void onBackPressed() {

@@ -28,30 +28,28 @@ import com.google.android.material.navigation.NavigationView;
 public class HostFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     //Fragment for homepage
     View view;
-    public static LinearLayout bottom;
-    public static TextView bTxt;
+    public LinearLayout bottom;
+    public TextView bottomText;
+
+    //public TextView bTxt;
     protected BottomNavigationView bottomNavigationView;
     protected NavigationView navigationView;
 
-    private static Fragment childFragment;
-    private static FragmentManager fragmentManager;
+    //private static Fragment childFragment;
+    private FragmentManager fragmentManager;
     private DrawerLayout drawerLayout;
-    private static TextView bottomText;
+
 //    private static FragmentTransaction transaction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }//onCreate ends
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_holder_fragment, container, false);
-
-
         return view;
     }//onCreateView ends
 
@@ -63,7 +61,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         navigationView = view.findViewById(R.id.nav_view);
 
         bottom = view.findViewById(R.id.bottomLL);
-        bTxt = view.findViewById(R.id.bottomTxt);
+        //bTxt = view.findViewById(R.id.bottomTxt);
         bottomText = view.findViewById(R.id.bottomTxt);
 
 
@@ -162,13 +160,13 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
             case R.id.nav_mode:
                 break;
             case R.id.nav_settings:
-                MainActivity.hideHost();
+                ((MainActivity) getActivity()).hideHost();
                 break;
             case R.id.nav_share:
                 break;
             case R.id.nav_logout:
                 // Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-                MainActivity.logOut();
+                ((MainActivity) getActivity()).logOut();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

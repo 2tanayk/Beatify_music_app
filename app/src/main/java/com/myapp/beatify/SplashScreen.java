@@ -10,7 +10,7 @@ import android.os.Handler;
 public class SplashScreen extends AppCompatActivity {
     //Activity for the splash screen"
 
-    private final int DELAY = 2000;//delay time
+    private final int DELAY = 500;//delay time
     boolean firstStart;
 
     @Override
@@ -36,18 +36,18 @@ public class SplashScreen extends AppCompatActivity {
                     editor.putBoolean("firstStart", false);
                     editor.apply();
 
-                    Intent i = new Intent(SplashScreen.this, WelcomeScreen.class);
-                    startActivity(i);
+                    // Intent i =
+                    startActivity(new Intent(SplashScreen.this, WelcomeScreen.class));
                     // close this activity
                     finish();
                 }//if ends
                 else {
-                    Intent i = new Intent(SplashScreen.this, LoginActivity.class);
-                    startActivity(i);
+                    //Intent i = ;
+                    startActivity(new Intent(SplashScreen.this, LoginActivity.class));
                     finish();
                 }//else ends
             }//run ends
-        }, DELAY); // wait for 5 seconds
+        }, DELAY); // wait for 500 milli-seconds
 
     }//openSplashScreen ends
 }//class ends

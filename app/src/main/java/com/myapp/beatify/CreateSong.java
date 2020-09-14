@@ -10,14 +10,6 @@ public class CreateSong {
         this.txt = txt;
     }
 
-    public void setImgURL(String imgURL) {
-        this.imgURL = imgURL;
-    }
-
-    public void setTxt(String txt) {
-        this.txt = txt;
-    }
-
     public String getImgURL() {
         return imgURL;
     }

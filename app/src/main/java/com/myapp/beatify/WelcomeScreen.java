@@ -13,12 +13,12 @@ public class WelcomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcomescreen);
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
     }//onCreate ends
 
     public void loginScreen(View v) {
-        Intent l = new Intent(WelcomeScreen.this, LoginActivity.class);
-        startActivity(l);
+        //Intent l = ;
+        startActivity(new Intent(WelcomeScreen.this, LoginActivity.class));
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }//login ends

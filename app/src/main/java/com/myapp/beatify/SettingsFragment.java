@@ -35,15 +35,14 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-import static com.myapp.beatify.MainActivity.IMG_URL;
-import static com.myapp.beatify.MainActivity.USERNAME;
-import static com.myapp.beatify.MainActivity.username;
 
 
 public class SettingsFragment extends Fragment {
     private static final int GET_IMAGE_REQUEST = 1010;
 
     private Uri mImageUri;
+
+    private MainActivity maRef;
 
     private String dbImageUri;
     String check;
@@ -62,7 +61,7 @@ public class SettingsFragment extends Fragment {
 
     SharedPreferences sharedPreferences;
 
-    public static final String SHARED_PREFS = "sharedPrefs";
+    public final String SHARED_PREFS = "sharedPrefs";
 
 
 //    public static final String SHARED_PREFS = "sharedPrefs";
@@ -71,6 +70,13 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        maRef = (MainActivity) getActivity();
+        MainActivity haRef = (MainActivity) getActivity();
+
+//        Log.e("Address1", maRef.toString());
+//        Log.e("Address2", this.getActivity().toString());
+//        Log.e("Address3", haRef.toString());
+
         sharedPreferences = this.getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 //        if (MainActivity.s == 1 &&)
 
@@ -81,7 +87,12 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_settings, container, false);
-        check = sharedPreferences.getString(IMG_URL, null);
+        try {
+            check = sharedPreferences.getString(maRef.IMG_URL, null);
+
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Exception!", Toast.LENGTH_SHORT).show();
+        }
         return view;
     }
 
@@ -93,13 +104,13 @@ public class SettingsFragment extends Fragment {
         userImg = view.findViewById(R.id.userDPImg);
         profileUpdateBtn = view.findViewById(R.id.updateBtn);
 
-        usernameTxt.setText(username + "");
+        usernameTxt.setText(maRef.username + "");
 
         if (check != null) {
             try {
 
                 //Toast.makeText(getActivity(), "fetching...", Toast.LENGTH_SHORT).show();
-                mImageUri = Uri.parse(sharedPreferences.getString(IMG_URL, null) + "");
+                mImageUri = Uri.parse(sharedPreferences.getString(maRef.IMG_URL, null) + "");
 
                 Glide.with(Objects.requireNonNull(getActivity()))
                         .load(mImageUri)
@@ -114,7 +125,7 @@ public class SettingsFragment extends Fragment {
         profileUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username = usernameTxt.getText().toString();
+                maRef.username = usernameTxt.getText().toString();
 
                 updateUsername();
             }
@@ -240,7 +251,6 @@ public class SettingsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Updated!", Toast.LENGTH_SHORT).show();
                             saveDataLocally(1);
-
                         } else {
                             Toast.makeText(getActivity(), "couldnt write to firebase", Toast.LENGTH_SHORT).show();
                             Log.e("Oops", Objects.requireNonNull(task.getException()).toString());
@@ -256,10 +266,10 @@ public class SettingsFragment extends Fragment {
 
         switch (w) {
             case 0:
-                editor.putString(USERNAME, username);
+                editor.putString(maRef.USERNAME, maRef.username);
                 break;
             case 1:
-                editor.putString(IMG_URL, mImageUri.toString());
+                editor.putString(maRef.IMG_URL, mImageUri.toString());
                 break;
             default:
                 Toast.makeText(getActivity(), "No match :(", Toast.LENGTH_SHORT).show();

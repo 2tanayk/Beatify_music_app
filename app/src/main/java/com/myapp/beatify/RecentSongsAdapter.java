@@ -13,42 +13,41 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.MyViewHolder> {
-    private List<CreateSong> mSongList;
+public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.MyViewHolder> {
+    private List<CreateSong> mRecentSongList;
     private OnItemClickListener mListener;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnClickListener(OnItemClickListener listener)
-    {
-        mListener=listener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 
-    public OtherSongsAdapter(List<CreateSong> mSongList) {
-        this.mSongList = mSongList;
+    public RecentSongsAdapter(List<CreateSong> mRecentSongList) {
+        this.mRecentSongList = mRecentSongList;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_other_songs, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view,mListener);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_recent_songs, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(view, mListener);
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 //        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
-        Glide.with(holder.imageView.getContext()).load(mSongList.get(position).getImgURL()).into(holder.imageView);
-        holder.textView.setText(mSongList.get(position).getTxt());
+        Glide.with(holder.imageView.getContext()).load(mRecentSongList.get(position).getImgURL()).into(holder.imageView);
+        holder.textView.setText(mRecentSongList.get(position).getTxt());
     }
 
     @Override
     public int getItemCount() {
-        return mSongList.size();
+        return mRecentSongList.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -63,14 +62,16 @@ public class OtherSongsAdapter extends RecyclerView.Adapter<OtherSongsAdapter.My
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position=getAdapterPosition();
+                    if (listener != null) {
+                        int position = getAdapterPosition();
 
-                    if(position==RecyclerView.NO_POSITION)
-                    {
-                        listener.onItemClick(position);
+                        if (position == RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
                     }
                 }
             });
         }
     }
+
 }

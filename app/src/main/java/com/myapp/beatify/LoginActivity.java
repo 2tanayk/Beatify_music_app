@@ -1,8 +1,5 @@
 package com.myapp.beatify;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,13 +10,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     //Login page activity"
@@ -29,14 +28,13 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Button loginBtn;
 
-    public static FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
 //    FirebaseUser currentUser;
 
     @Override
     protected void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
-
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -46,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Intent i = getIntent();
+        // Intent i = getIntent();
 
         emailTxt = findViewById(R.id.emailEditText);
         passwordTxt = findViewById(R.id.passwordEditText);
@@ -64,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void registerPage(View v) {
-        Intent r = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(r);
+        // Intent r = ;
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }//registerPage ends
 
 
@@ -73,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         loginBtn.setEnabled(false);
 
-        String emailId = emailTxt.getText().toString();
-        String password = passwordTxt.getText().toString();
+        String emailId = emailTxt.getText().toString().trim();
+        String password = passwordTxt.getText().toString().trim();
 
         if (TextUtils.isEmpty(emailId) || TextUtils.isEmpty(password)) {
             progressBar.setVisibility(View.GONE);
@@ -115,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgotPassword(View v) {
         try { //try and catch block to catch NullPointerException
-            mAuth.sendPasswordResetEmail(emailTxt.getText().toString())
+            mAuth.sendPasswordResetEmail(emailTxt.getText().toString().trim())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
