@@ -18,18 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeChildFragment extends Fragment {
-    private List<CreateSong> likingList;
-    private List<CreateSong> recentList;
-    private List<CreateSong> ourList;
+    private List<CreateSong> likingList;//list for the first RV
+    private List<CreateSong> recentList;//list for the second RV
+    private List<CreateSong> ourList; //list for the third RV
 //    private List<String> urls;
 
-    private RecyclerView likingRecyclerView;
-    private RecyclerView recentRecyclerView;
-    private RecyclerView ourRecyclerView;
+    private RecyclerView likingRecyclerView;//first RV
+    private RecyclerView recentRecyclerView;//second RV
+    private RecyclerView ourRecyclerView;//third RV
 
-    private LikingSongAdapter lAdapter;
-    private RecentSongsAdapter rAdapter;
-    private OurPicksAdapter oAdapter;
+    private LikingSongAdapter lAdapter;//adapter for first RV
+    private RecentSongsAdapter rAdapter;//adapter for second RV
+    private OurPicksAdapter oAdapter;//adapter for third RV
 
 //    private RecyclerView.LayoutManager tLayoutManager;
 
@@ -39,6 +39,7 @@ public class HomeChildFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //creating the lists
         createUserLikingList();
         createUserRecentList();
         createOurPicksList();
@@ -57,6 +58,7 @@ public class HomeChildFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //creating the RVs
         createUserLikingRecyclerView();
         createUserRecentRecyclerView();
         createOurPicksRecyclerView();
@@ -102,19 +104,19 @@ public class HomeChildFragment extends Fragment {
         lAdapter = new LikingSongAdapter(likingList);
 
 
+        likingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        likingRecyclerView.setAdapter(lAdapter);
+
         lAdapter.setOnItemClickListener(new LikingSongAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(int position) {//to handle onClicks() (this is working)
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 //HostFragment.bottom.setVisibility(View.VISIBLE);
+
                 ((HostFragment) getParentFragment()).bottom.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
-
-        likingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        likingRecyclerView.setAdapter(lAdapter);
 
 
     }
@@ -126,17 +128,18 @@ public class HomeChildFragment extends Fragment {
         rAdapter = new RecentSongsAdapter(recentList);
 
 
+        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        recentRecyclerView.setAdapter(rAdapter);
+
         rAdapter.setOnItemClickListener(
-                new RecentSongsAdapter.OnItemClickListener() {
+                new RecentSongsAdapter.OnItemClickListener() {//not working
                     @Override
                     public void onItemClick(int position) {
                         Log.e("Info", "Connected");
                         Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
-        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        recentRecyclerView.setAdapter(rAdapter);
 
 
     }
@@ -146,18 +149,17 @@ public class HomeChildFragment extends Fragment {
         ourRecyclerView.setHasFixedSize(true);
         oAdapter = new OurPicksAdapter(ourList);
 
+        ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        ourRecyclerView.setAdapter(oAdapter);
 
         oAdapter.setOnItemClickListener(new OurPicksAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(int position) {//not working
                 Log.e("Info", "Connected");
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
-
-        ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        ourRecyclerView.setAdapter(oAdapter);
 
 
 //        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {

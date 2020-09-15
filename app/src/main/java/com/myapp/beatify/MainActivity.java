@@ -65,28 +65,29 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         if (s == 0) {
-            username = mI.getStringExtra("USERNAME");
+            username = mI.getStringExtra("USERNAME");//we set username by default as email id
         } else {
-            username = sharedPreferences.getString(USERNAME, null);
+            username = sharedPreferences.getString(USERNAME, null);//we retrieve the username that has been stored in shared prefs
 
             if (username == null) {
-                readFromFirestore();
+                readFromFirestore();//in an event that user deletes the app we retrieve user name from firestore
             }
 //            Toast.makeText(this, "" + sharedPreferences.getString(PREFERENCE, "nope"), Toast.LENGTH_SHORT).show();
         }
 
         fragmentManager = getSupportFragmentManager();
 
-        if (findViewById(R.id.fragment_container) != null) {
+        if (findViewById(R.id.fragment_container) != null) { //null check
             if (savedInstanceState != null) {
                 return;
             }//inner if ends
 
 //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             //PreferencesFragment preferencesFragment = new PreferencesFragment();
-            if (s == 0) {
+
+            if (s == 0) {//if the user has just registered we ask him his choice of music
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), "Preferences").commit();
-            } else {
+            } else { //else we directly take him to home page
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
             }
 //            fragmentTransaction.commit();
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public void setRecordPref(String recordPref) {
         this.recordPref = recordPref;
 
-        createUserDoc();
+        createUserDoc();//we create the User document for Firebase Firestore
     }
 
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         user.put("image_url", null);
         user.put("last logged in", new Timestamp(new Date()));
 
-        writeToFirestore();
+        writeToFirestore(); //writing all of this to Firebase
     }
 
 
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveDataLocally() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit(); //saving the data locally for fast retrieval and saving no of reads in the firestore
 
         editor.putString(USERNAME, username);
         editor.putString(PREFERENCE, recordPref);
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void logOut() {
+    public void logOut() {//to logout of the app
         FirebaseAuth.getInstance().signOut();
         //activity.finish();
         finish();
@@ -196,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hideHost() {
-        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Host")).commit();
-
+        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Host")).commit();//to hide the host fragment
+        //add the settings page or if already added show it
         if (fragmentManager.findFragmentByTag("Settings") != null) {
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Settings")).commit();
         } else {
@@ -213,14 +214,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         test = (SettingsFragment) fragmentManager.findFragmentByTag("Settings");
-        if (test != null && test.isVisible()) {
-            //DO STUFF
+        if (test != null && test.isVisible()) { //here we see where the back button has been hit
+            //if the back has been hit in the settings fragment we hide it and show the host fragment again
             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Settings")).commit();
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Host")).commit();
         } else {
-            //Whatever
+            //default behavior
             super.onBackPressed();
         }
 
-    }
+    }//onBackPressed() ends
 }//class ends

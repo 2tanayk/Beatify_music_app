@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+//we implement the interface to handle onClick() from the nav. drawer
 public class HostFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     //Fragment for homepage
     View view;
@@ -55,24 +56,26 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar); //Toolbar enabled for the hamburger icon (for navigation drawer)
 
-        drawerLayout = view.findViewById(R.id.homeFrag);
-        navigationView = view.findViewById(R.id.nav_view);
+        drawerLayout = view.findViewById(R.id.homeFrag);//DrawerLayout for nav. drawer
+        navigationView = view.findViewById(R.id.nav_view);//navigation view for the drawer
 
-        bottom = view.findViewById(R.id.bottomLL);
+        bottom = view.findViewById(R.id.bottomLL);//for the bottom media player
         //bTxt = view.findViewById(R.id.bottomTxt);
-        bottomText = view.findViewById(R.id.bottomTxt);
+        bottomText = view.findViewById(R.id.bottomTxt);//a part of the bottom media player for the receiving onClick()
 
-
+        //to enable sliding in and out on the nav drawer and creating a hamburger icon
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        bottomNavigationView = view.findViewById(R.id.bottom_nav_bar);
-        //set default as home page
+        bottomNavigationView = view.findViewById(R.id.bottom_nav_bar);//bottom navigation view to switch from home page to other
+
+        //set home page as default
+
         //childFragment =new HomeChildFragment();
-        fragmentManager = getChildFragmentManager();
+        fragmentManager = getChildFragmentManager();//to nest fragments inside this fragment
         fragmentManager.beginTransaction().add(R.id.frag_holder, new HomeChildFragment(), "home").addToBackStack("holder").commit();
 
         bottomText.setOnClickListener(new View.OnClickListener() {
@@ -83,9 +86,9 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
                 startActivity(intent, options.toBundle());
             }
         });
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);//to receive onClick() from contents inside the drawer
 
-        switchPage();
+        switchPage();//method to switch between different pages (fragments)
     }
 
 
@@ -94,11 +97,12 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId()) {
-                    case R.id.nav_home:
-                        if (fragmentManager.findFragmentByTag("home") != null) {
+                switch (item.getItemId()) {//switch case to recieve and execute appropriate onClick() events from bottom nav.view
+                    case R.id.nav_home://home page
+                        if (fragmentManager.findFragmentByTag("home") != null) { //we show the home fragment
                             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
                         }
+                        //we hide the other two
                         if (fragmentManager.findFragmentByTag("search") != null) {
                             //if the other fragment is visible, hide it.
                             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("search")).commit();
@@ -108,14 +112,14 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
                             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("liked")).commit();
                         }
                         break;
-                    case R.id.nav_search:
-                        //childFragment = new SearchChildFragment();
+                    case R.id.nav_search: //search page
+                        //we add if it has not already been added else we show it
                         if (fragmentManager.findFragmentByTag("search") != null) {
                             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("search")).commit();
                         } else {
                             fragmentManager.beginTransaction().add(R.id.frag_holder, new SearchChildFragment(), "search").addToBackStack("holder").commit();
                         }
-
+                        //we hide the other two
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //if the other fragment is visible, hide it.
                             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
@@ -126,12 +130,14 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
                         }
 
                         break;
-                    case R.id.nav_liked:
+                    case R.id.nav_liked://user liked songs page
+                        //we add if it has not already been added else we show it
                         if (fragmentManager.findFragmentByTag("liked") != null) {
                             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("liked")).commit();
                         } else {
                             fragmentManager.beginTransaction().add(R.id.frag_holder, new FavouritesChildFragment(), "liked").addToBackStack("holder").commit();
                         }
+                        //we hide the other two
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //if the other fragment is visible, hide it.
                             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
@@ -140,31 +146,30 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
                             //if the other fragment is visible, hide it.
                             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("search")).commit();
                         }
-
                         break;
                     default:
                         Toast.makeText(getContext(), "oops :(", Toast.LENGTH_SHORT).show();
-                }
+                }//end of switch
 
 //                getChildFragmentManager().beginTransaction().replace(R.id.frag_holder,
 //                        childFragment).commit();
 
                 return true;
-            }
+            }//method end
         });
-    }
+    }//end of the switch page method
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_mode:
+        switch (item.getItemId()) {//switch case to recieve and execute appropriate onClick() events from nav. drawer
+            case R.id.nav_mode://to switch between dark and light theme
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_settings://to change user name and dp
                 ((MainActivity) getActivity()).hideHost();
                 break;
-            case R.id.nav_share:
+            case R.id.nav_share://to share the app
                 break;
-            case R.id.nav_logout:
+            case R.id.nav_logout://to logout from the app
                 // Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
                 ((MainActivity) getActivity()).logOut();
                 break;

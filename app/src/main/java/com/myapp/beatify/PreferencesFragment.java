@@ -70,9 +70,9 @@ public class PreferencesFragment extends Fragment {
 //                posn = position;
 
 //                recordPref = clist.get(position).getTxt();
-                ((MainActivity) getActivity()).setRecordPref(clist.get(position).getTxt());
+                ((MainActivity) getActivity()).setRecordPref(clist.get(position).getTxt());// we pass this to the parent activity
 
-                ((MainActivity) getActivity()).onGenreClicked();
+                ((MainActivity) getActivity()).onGenreClicked();// to get to our home page (we first add a host fragment through this)
 //                Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
             }//onItemClick ends
         });
