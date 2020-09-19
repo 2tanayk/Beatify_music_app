@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,13 +16,13 @@ import java.util.List;
 
 public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.MyViewHolder> {
     private List<CreateSong> mRecentSongList;
-    private OnItemClickListener mListener;
+    private OnRecentSongsItemClickListener mListener;
 
-    public interface OnItemClickListener {
+    public interface OnRecentSongsItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnRecentSongsItemClickListener listener) {
         mListener = listener;
     }
 
@@ -53,11 +54,13 @@ public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
+        public CardView cardView;
 
-        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, final OnRecentSongsItemClickListener listener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.recent_img);
             this.textView = itemView.findViewById(R.id.recent_txt);
+            this.cardView = itemView.findViewById(R.id.create_recent_RV);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,7 +68,7 @@ public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.
                     if (listener != null) {
                         int position = getAdapterPosition();
 
-                        if (position == RecyclerView.NO_POSITION) {
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }

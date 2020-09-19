@@ -124,6 +124,7 @@ public class HomeChildFragment extends Fragment {
     private void createUserRecentRecyclerView() {
         recentRecyclerView = view.findViewById(R.id.user_recent_RV);
         recentRecyclerView.setHasFixedSize(true);
+        recentRecyclerView.setNestedScrollingEnabled(false);
 
         rAdapter = new RecentSongsAdapter(recentList);
 
@@ -133,7 +134,7 @@ public class HomeChildFragment extends Fragment {
         recentRecyclerView.setAdapter(rAdapter);
 
         rAdapter.setOnItemClickListener(
-                new RecentSongsAdapter.OnItemClickListener() {//not working
+                new RecentSongsAdapter.OnRecentSongsItemClickListener() {//not working
                     @Override
                     public void onItemClick(int position) {
                         Log.e("Info", "Connected");
@@ -147,6 +148,7 @@ public class HomeChildFragment extends Fragment {
     private void createOurPicksRecyclerView() {
         ourRecyclerView = view.findViewById(R.id.our_RV);
         ourRecyclerView.setHasFixedSize(true);
+        ourRecyclerView.setNestedScrollingEnabled(false);
         oAdapter = new OurPicksAdapter(ourList);
 
         ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));

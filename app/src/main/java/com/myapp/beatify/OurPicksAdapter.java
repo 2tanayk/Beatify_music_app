@@ -65,7 +65,7 @@ public class OurPicksAdapter extends RecyclerView.Adapter<OurPicksAdapter.MyView
                     if (listener != null) {
                         int position = getAdapterPosition();
 
-                        if (position == RecyclerView.NO_POSITION) {
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }
