@@ -89,7 +89,6 @@ public class SettingsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_settings, container, false);
         try {
             check = sharedPreferences.getString(maRef.IMG_URL, null);
-
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Exception!", Toast.LENGTH_SHORT).show();
         }
@@ -135,7 +134,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getFromGallery();
-
             }
         });
 
