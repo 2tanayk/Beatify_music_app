@@ -1,5 +1,6 @@
 package com.myapp.beatify;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ public class HomeChildFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("HomeChildFragment", "onCreate()");
 
         //creating the lists
         createUserLikingList();
@@ -51,6 +53,7 @@ public class HomeChildFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_child, container, false);
+        Log.e("HomeChildFragment", "onCreateView()");
         return view;
     }
 
@@ -58,6 +61,7 @@ public class HomeChildFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Log.e("HomeChildFragment", "onViewCreated()");
         //creating the RVs
         createUserLikingRecyclerView();
         createUserRecentRecyclerView();
@@ -172,7 +176,61 @@ public class HomeChildFragment extends Fragment {
 //        });
     }
 
-//    @Override
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("HomeChildFragment", "onStart()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("HomeChildFragment", "onStop()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("HomeChildFragment", "onPause()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("HomeChildFragment", "onResume()");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("HomeChildFragment", "onActivityCreated()");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.e("HomeChildFragment", "onAttach()");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("HomeChildFragment", "onDestroyView()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("HomeChildFragment", "onDestroy()");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("HomeChildFragment", "onDetach()");
+    }
+
+    //    @Override
 //    public void onItemClick(int position) {
 //        //Like
 //        Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();

@@ -70,6 +70,8 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("Settings Fragment", "onCreate()");
+
         maRef = (MainActivity) getActivity();
         MainActivity haRef = (MainActivity) getActivity();
 
@@ -87,6 +89,8 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_settings, container, false);
+        Log.e("Settings Fragment", "onCreateView()");
+
         try {
             check = sharedPreferences.getString(maRef.IMG_URL, null);
         } catch (Exception e) {
@@ -98,6 +102,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.e("Settings Fragment", "onViewCreated()");
 
         usernameTxt = view.findViewById(R.id.userNameTxt);
         userImg = view.findViewById(R.id.userDPImg);
@@ -161,6 +166,13 @@ public class SettingsFragment extends Fragment {
             uploadToStorage();
         }
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("Settings Fragment", "onActivityCreated()");
+    }
+
 
     private String getFileExtension(Uri uri) {
         ContentResolver cR = getActivity().getApplicationContext().getContentResolver();
@@ -277,7 +289,56 @@ public class SettingsFragment extends Fragment {
         editor.apply();
     }
 
-//    private void save() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("Settings Fragment", "onStart()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("Settings Fragment", "onResume()");
+    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.e("Settings Fragment", "onAttach()");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("Settings Fragment", "onDestroyView()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Settings Fragment", "onDestroy()");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("Settings Fragment", "onDetach()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Settings Fragment", "onPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Settings Fragment", "onStop()");
+
+    }
+    //    private void save() {
 //    SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 //    SharedPreferences.Editor editor = sharedPreferences.edit();
 //
@@ -285,5 +346,6 @@ public class SettingsFragment extends Fragment {
 //    editor.apply();
 //
 //}
+
 
 }

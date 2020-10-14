@@ -1,8 +1,10 @@
 package com.myapp.beatify;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,17 +48,23 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("Host Fragment", "onCreate()");
+
     }//onCreate ends
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_holder_fragment, container, false);
+        Log.e("Host Fragment", "onCreateView()");
+
         return view;
     }//onCreateView ends
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.e("Host Fragment", "onViewCreated()");
+
         Toolbar toolbar = view.findViewById(R.id.toolbar); //Toolbar enabled for the hamburger icon (for navigation drawer)
 
         drawerLayout = view.findViewById(R.id.homeFrag);//DrawerLayout for nav. drawer
@@ -97,7 +106,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId()) {//switch case to recieve and execute appropriate onClick() events from bottom nav.view
+                switch (item.getItemId()) {//switch case to receive and execute appropriate onClick() events from bottom nav.view
                     case R.id.nav_home://home page
                         if (fragmentManager.findFragmentByTag("home") != null) { //we show the home fragment
                             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
@@ -178,8 +187,64 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         return true;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.e("Host Fragment", "onAttach()");
+    }
 
-//    public void openMediaPlayer(View view) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("Host Fragment", "onStart()");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Host Fragment", "onStop()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("Host Fragment", "onResume()");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("Host Fragment", "onActivityCreated()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Host Fragment", "onPause()");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("Host Fragment", "onDetach()");
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Host Fragment", "onDestroy()");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("Host Fragment", "onDestroyView()");
+    }
+
+
+    //    public void openMediaPlayer(View view) {
 //        try {
 //
 ////            Toast.makeText(getContext(), "oops:(", Toast.LENGTH_SHORT).show();
