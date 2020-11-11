@@ -24,11 +24,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//0-user has registered
+//1-user has logged in
 public class MainActivity extends AppCompatActivity {
     //MainActivity which acts as a fragment holder
-
-
     private FragmentManager fragmentManager;
     //private final String COLLECTION_TITLE = "Music";
     //public AppCompatActivity activity = null;
@@ -58,22 +57,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e("MainActivity", "onCreate()");
         //activity = this;
-        Intent mI = getIntent();
 
+        Intent mI = getIntent();
+        //to check whether user has logged in or just registered
         s = mI.getIntExtra("STATUS", 1);
         sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         if (s == 0) {
             username = mI.getStringExtra("USERNAME");//we set username by default as email id
-        } else {
-            username = sharedPreferences.getString(USERNAME, null);//we retrieve the username that has been stored in shared prefs
+        }//if ends
+        else {
+            //we retrieve the username that has been stored in shared prefs
+            username = sharedPreferences.getString(USERNAME, null);
 
             if (username == null) {
                 readFromFirestore();//in an event that user deletes the app we retrieve user name from firestore
-            }
+            }//inner if ends
+
 //            Toast.makeText(this, "" + sharedPreferences.getString(PREFERENCE, "nope"), Toast.LENGTH_SHORT).show();
-        }
+        }//else ends
 
         fragmentManager = getSupportFragmentManager();
 
@@ -87,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (s == 0) {//if the user has just registered we ask him his choice of music
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new PreferencesFragment(), "Preferences").commit();
+                Log.e("Info", "In user registration condition");
             } else { //else we directly take him to home page
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new HostFragment(), "Host").addToBackStack(null).commit();
+                Log.e("Info", "In user login condition");
             }
 //            fragmentTransaction.commit();
 //            createMusicCollection();
@@ -135,8 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setRecordPref(String recordPref) {
         this.recordPref = recordPref;
-
+        Log.e("Info:", "in setRecordPref()" + System.currentTimeMillis());
         createUserDoc();//we create the User document for Firebase Firestore
+
     }
 
 
@@ -145,12 +152,14 @@ public class MainActivity extends AppCompatActivity {
         user.put("preference", recordPref);
         user.put("image_url", null);
         user.put("last logged in", new Timestamp(new Date()));
+        Log.e("Info:", "in createUserDoc()" + System.currentTimeMillis());
 
         writeToFirestore(); //writing all of this to Firebase
     }
 
 
     private void writeToFirestore() {
+
         db.collection("Users")
                 .document("" + FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .set(user)
@@ -158,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Info", "DocumentSnapshot successfully written!");
+                        Log.e("Info:", "in onSuccess()" + System.currentTimeMillis());
                         saveDataLocally();
                     }
 
@@ -175,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveDataLocally() {
+        Log.e("Info:", "in saveDataLocally()" + System.currentTimeMillis());
         SharedPreferences.Editor editor = sharedPreferences.edit(); //saving the data locally for fast retrieval and saving no of reads in the firestore
 
         editor.putString(USERNAME, username);
@@ -185,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onGenreClicked() {
+        Log.e("Info:", "in onGenreClicked()" + System.currentTimeMillis());
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new HostFragment(), "Host").commit();
     }
 
@@ -213,15 +225,57 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Log.e("Info", "in onBackPressed()");
         test = (SettingsFragment) fragmentManager.findFragmentByTag("Settings");
         if (test != null && test.isVisible()) { //here we see where the back button has been hit
             //if the back has been hit in the settings fragment we hide it and show the host fragment again
+            Log.e("Info", "In special settings condn");
             fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("Settings")).commit();
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Host")).commit();
         } else {
             //default behavior
+            Log.e("Info", "default behavior");
+
             super.onBackPressed();
+            finish();
+
         }
 
     }//onBackPressed() ends
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e("MainActivity", "onStart()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("MainActivity", "onResume()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("MainActivity", "onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("MainActivity", "onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("MainActivity", "onDestroy()");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("MainActivity", "onRestart()");
+    }
 }//class ends

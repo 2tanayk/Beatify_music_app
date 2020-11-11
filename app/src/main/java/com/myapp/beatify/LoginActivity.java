@@ -21,15 +21,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-    //Login page activity"
-
+    //Login page activity
     private EditText emailTxt;
     private EditText passwordTxt;
     private ProgressBar progressBar;
     private Button loginBtn;
-
     public FirebaseAuth mAuth;
-//    FirebaseUser currentUser;
 
     @Override
     protected void onStart() {
@@ -44,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Intent i = getIntent();
 
         emailTxt = findViewById(R.id.emailEditText);
         passwordTxt = findViewById(R.id.passwordEditText);
@@ -52,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
 
         mAuth = FirebaseAuth.getInstance();
-
     }//onCreate ends
 
     @Override
@@ -62,10 +57,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void registerPage(View v) {
-        // Intent r = ;
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }//registerPage ends
-
 
     public void login(View v) {
         progressBar.setVisibility(View.VISIBLE);
@@ -95,9 +88,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
 
                 Intent b = new Intent(LoginActivity.this, MainActivity.class);
+                // 1 to indicate that the user has logged in
                 b.putExtra("STATUS", 1);
                 startActivity(b);
-                finish();
+                finishAffinity();//
             }//onSuccess ends
         }).addOnFailureListener(new OnFailureListener() {
             @Override

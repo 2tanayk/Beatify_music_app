@@ -35,14 +35,12 @@ public class SplashScreen extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("firstStart", false);
                     editor.apply();
-
                     // Intent i =
                     startActivity(new Intent(SplashScreen.this, WelcomeScreen.class));
                     // close this activity
                     finish();
                 }//if ends
                 else {
-                    //Intent i = ;
                     startActivity(new Intent(SplashScreen.this, LoginActivity.class));
                     finish();
                 }//else ends

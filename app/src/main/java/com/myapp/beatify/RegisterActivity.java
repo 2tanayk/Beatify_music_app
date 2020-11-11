@@ -92,10 +92,12 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
 
                     Intent n = new Intent(RegisterActivity.this, MainActivity.class);
+                    //0 value to indicate that the user registered
+                    //n.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     n.putExtra("STATUS", 0);
                     n.putExtra("USERNAME", username + "");
                     startActivity(n);
-                    finish();
+                    finishAffinity();
                 }//if ends
                 else {
                     progressBar.setVisibility(View.GONE);

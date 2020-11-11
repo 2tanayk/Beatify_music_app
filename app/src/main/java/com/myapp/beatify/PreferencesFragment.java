@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,8 @@ import java.util.List;
 
 public class PreferencesFragment extends Fragment {
     //Fragment FOR music preference page
-//    private List<String> pref;
+
+    //    private List<String> pref;
     private List<CreatePreferences> clist;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -71,7 +73,7 @@ public class PreferencesFragment extends Fragment {
 
 //                recordPref = clist.get(position).getTxt();
                 ((MainActivity) getActivity()).setRecordPref(clist.get(position).getTxt());// we pass this to the parent activity
-
+                Log.e("Info:", "about to invoke the next line" + System.currentTimeMillis());
                 ((MainActivity) getActivity()).onGenreClicked();// to get to our home page (we first add a host fragment through this)
 //                Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
             }//onItemClick ends

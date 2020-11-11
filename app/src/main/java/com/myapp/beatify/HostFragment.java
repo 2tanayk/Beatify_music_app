@@ -86,6 +86,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         //childFragment =new HomeChildFragment();
         fragmentManager = getChildFragmentManager();//to nest fragments inside this fragment
         fragmentManager.beginTransaction().add(R.id.frag_holder, new HomeChildFragment(), "home").addToBackStack("holder").commit();
+        //.addToBackStack("holder")
 
         bottomText.setOnClickListener(new View.OnClickListener() {
             @Override
