@@ -58,7 +58,7 @@
             android:orientation="horizontal"
             android:padding="5dp"
             android:transitionName="bottom_player_transition"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/bottomImg"

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected String username = "";//
     protected String preferences = "";
-    public String recordPref;
+    public String   recordPref;
     public String userDpURL;
     //Initialized a reference of CF
     private FirebaseFirestore db = FirebaseFirestore.getInstance();

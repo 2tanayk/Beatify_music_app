@@ -15,10 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeChildFragment extends Fragment {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference musicRef = db.collection("Music");
+
     private List<CreateSong> likingList;//list for the first RV
     private List<CreateSong> recentList;//list for the second RV
     private List<CreateSong> ourList; //list for the third RV
@@ -29,8 +37,10 @@ public class HomeChildFragment extends Fragment {
     private RecyclerView ourRecyclerView;//third RV
 
     private LikingSongAdapter lAdapter;//adapter for first RV
-    private RecentSongsAdapter rAdapter;//adapter for second RV
+    private TopSongsAdapter rAdapter;//adapter for second RV
     private OurPicksAdapter oAdapter;//adapter for third RV
+
+    String pref;
 
 //    private RecyclerView.LayoutManager tLayoutManager;
 
@@ -53,6 +63,8 @@ public class HomeChildFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_child, container, false);
+        Fragment fragment = (HostFragment) getParentFragment();
+        pref = ((MainActivity) fragment.getActivity()).recordPref;
         Log.e("HomeChildFragment", "onCreateView()");
         return view;
     }
@@ -64,7 +76,7 @@ public class HomeChildFragment extends Fragment {
         Log.e("HomeChildFragment", "onViewCreated()");
         //creating the RVs
         createUserLikingRecyclerView();
-        createUserRecentRecyclerView();
+        createTopSongsRecyclerView();
         createOurPicksRecyclerView();
     }
 
@@ -103,9 +115,15 @@ public class HomeChildFragment extends Fragment {
     }
 
     private void createUserLikingRecyclerView() {
+        Query query = musicRef.orderBy("title");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
         likingRecyclerView = view.findViewById(R.id.user_liking_RV);
+
         likingRecyclerView.setHasFixedSize(true);
-        lAdapter = new LikingSongAdapter(likingList);
+        lAdapter = new LikingSongAdapter(options);
 
 
         likingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -125,35 +143,43 @@ public class HomeChildFragment extends Fragment {
 
     }
 
-    private void createUserRecentRecyclerView() {
+    private void createTopSongsRecyclerView() {
+        Query query = musicRef.orderBy("title");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
+
         recentRecyclerView = view.findViewById(R.id.user_recent_RV);
         recentRecyclerView.setHasFixedSize(true);
         recentRecyclerView.setNestedScrollingEnabled(false);
 
-        rAdapter = new RecentSongsAdapter(recentList);
+        rAdapter = new TopSongsAdapter(options);
 
 
         recentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
         recentRecyclerView.setAdapter(rAdapter);
 
         rAdapter.setOnItemClickListener(
-                new RecentSongsAdapter.OnRecentSongsItemClickListener() {//not working
+                new TopSongsAdapter.OnTopSongsItemClickListener() {//not working
                     @Override
                     public void onItemClick(int position) {
                         Log.e("Info", "Connected");
                         Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
     }
 
     private void createOurPicksRecyclerView() {
+        Query query = musicRef.orderBy("title");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
         ourRecyclerView = view.findViewById(R.id.our_RV);
         ourRecyclerView.setHasFixedSize(true);
         ourRecyclerView.setNestedScrollingEnabled(false);
-        oAdapter = new OurPicksAdapter(ourList);
+        oAdapter = new OurPicksAdapter(options);
 
         ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -166,8 +192,6 @@ public class HomeChildFragment extends Fragment {
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
-
-
 //        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(int position) {
@@ -180,12 +204,18 @@ public class HomeChildFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.e("HomeChildFragment", "onStart()");
+        lAdapter.startListening();
+        rAdapter.startListening();
+        oAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log.e("HomeChildFragment", "onStop()");
+        lAdapter.stopListening();
+        rAdapter.stopListening();
+        oAdapter.stopListening();
     }
 
     @Override

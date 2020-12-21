@@ -10,25 +10,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.List;
 
-public class LikingSongAdapter extends RecyclerView.Adapter<LikingSongAdapter.MyViewHolder> {
-    private List<CreateSong> mSongList;
+public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSongAdapter.MyViewHolder> {
+    //RecyclerView.Adapter<LikingSongAdapter.MyViewHolder>
+//    private List<CreateSong> mSongList;
     private OnItemClickListener mListener;
+
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public LikingSongAdapter(@NonNull FirestoreRecyclerOptions<Music> options) {
+        super(options);
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
-    }
-
-
-    public LikingSongAdapter(List<CreateSong> mSongList) {
-        this.mSongList = mSongList;
     }
 
     @NonNull
@@ -39,18 +46,20 @@ public class LikingSongAdapter extends RecyclerView.Adapter<LikingSongAdapter.My
         MyViewHolder myViewHolder = new MyViewHolder(view, mListener);
         return myViewHolder;
     }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+////        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
+//        Glide.with(holder.imageView.getContext()).load(mSongList.get(position).getImgURL()).into(holder.imageView);
+//        holder.textView.setText(mSongList.get(position).getTxt());
+//    }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
-        Glide.with(holder.imageView.getContext()).load(mSongList.get(position).getImgURL()).into(holder.imageView);
-        holder.textView.setText(mSongList.get(position).getTxt());
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Music model) {
+        holder.textView.setText(model.getTitle());
+        Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
     }
 
-    @Override
-    public int getItemCount() {
-        return mSongList.size();
-    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;

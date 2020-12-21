@@ -10,12 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.List;
 
-public class OurPicksAdapter extends RecyclerView.Adapter<OurPicksAdapter.MyViewHolder> {
-    private List<CreateSong> mOurPicksList;
+public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAdapter.MyViewHolder> {
+    //private List<CreateSong> mOurPicksList;
     private OnItemClickListener mListener;
+
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public OurPicksAdapter(@NonNull FirestoreRecyclerOptions<Music> options) {
+        super(options);
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -25,9 +37,6 @@ public class OurPicksAdapter extends RecyclerView.Adapter<OurPicksAdapter.MyView
         mListener = listener;
     }
 
-    public OurPicksAdapter(List<CreateSong> mSongList) {
-        this.mOurPicksList = mSongList;
-    }
 
     @NonNull
     @Override
@@ -39,15 +48,9 @@ public class OurPicksAdapter extends RecyclerView.Adapter<OurPicksAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
-        Glide.with(holder.imageView.getContext()).load(mOurPicksList.get(position).getImgURL()).into(holder.imageView);
-        holder.textView.setText(mOurPicksList.get(position).getTxt());
-    }
-
-    @Override
-    public int getItemCount() {
-        return mOurPicksList.size();
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Music model) {
+        holder.textView.setText(model.getTitle());
+        Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

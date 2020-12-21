@@ -11,23 +11,29 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.List;
+public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAdapter.MyViewHolder> {
+    //private List<CreateSong> mRecentSongList;
+    private OnTopSongsItemClickListener mListener;
 
-public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.MyViewHolder> {
-    private List<CreateSong> mRecentSongList;
-    private OnRecentSongsItemClickListener mListener;
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public TopSongsAdapter(@NonNull FirestoreRecyclerOptions<Music> options) {
+        super(options);
+    }
 
-    public interface OnRecentSongsItemClickListener {
+    public interface OnTopSongsItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnRecentSongsItemClickListener listener) {
+    public void setOnItemClickListener(OnTopSongsItemClickListener listener) {
         mListener = listener;
-    }
-
-    public RecentSongsAdapter(List<CreateSong> mRecentSongList) {
-        this.mRecentSongList = mRecentSongList;
     }
 
     @NonNull
@@ -40,27 +46,21 @@ public class RecentSongsAdapter extends RecyclerView.Adapter<RecentSongsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
-        Glide.with(holder.imageView.getContext()).load(mRecentSongList.get(position).getImgURL()).into(holder.imageView);
-        holder.textView.setText(mRecentSongList.get(position).getTxt());
-    }
-
-    @Override
-    public int getItemCount() {
-        return mRecentSongList.size();
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Music model) {
+        holder.textView.setText(model.getTitle());
+        Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
-        public CardView cardView;
+        //public CardView cardView;
 
-        public MyViewHolder(@NonNull View itemView, final OnRecentSongsItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, final OnTopSongsItemClickListener listener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.recent_img);
             this.textView = itemView.findViewById(R.id.recent_txt);
-            this.cardView = itemView.findViewById(R.id.create_recent_RV);
+            //this.cardView = itemView.findViewById(R.id.create_recent_RV);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

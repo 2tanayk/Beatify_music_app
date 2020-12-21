@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 //we implement the interface to handle onClick() from the nav. drawer
 public class HostFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
