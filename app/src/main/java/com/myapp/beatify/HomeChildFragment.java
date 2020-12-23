@@ -1,6 +1,9 @@
 package com.myapp.beatify;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,14 +20,18 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeChildFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    MediaPlayer player;
+
     private CollectionReference musicRef = db.collection("Music");
 
     private List<CreateSong> likingList;//list for the first RV
@@ -131,16 +138,44 @@ public class HomeChildFragment extends Fragment {
 
         lAdapter.setOnItemClickListener(new LikingSongAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {//to handle onClicks() (this is working)
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {//to handle onClicks() (this is working)
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 //HostFragment.bottom.setVisibility(View.VISIBLE);
-
                 ((HostFragment) getParentFragment()).bottom.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+                Music music = documentSnapshot.toObject(Music.class);
+                String musicUrl = music.getMusicUrl();
+
+                playMusic(musicUrl);
             }
         });
 
 
+    }
+
+    private void playMusic(String musicUrl) {
+
+        if (player == null) {
+            player = new MediaPlayer();
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        } else {
+            player.reset();
+        }
+
+        try {
+            player.setDataSource(musicUrl);
+            player.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                player.start();
+            }
+        });
     }
 
     private void createTopSongsRecyclerView() {

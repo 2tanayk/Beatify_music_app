@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -61,7 +62,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     }
 
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
 
@@ -77,7 +78,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(getSnapshots().getSnapshot(position), position);
                         }
                     }
                 }

@@ -7,15 +7,17 @@ public class Music {
     private String url;
     private String category;
     private List<String> artists;
+    private String musicUrl;
 
     public Music() {
     }
 
-    public Music(String title, String url, String category, List<String> artists) {
+    public Music(String title, String url, String category, List<String> artists, String musicUrl) {
         this.title = title;
         this.url = url;
         this.category = category;
         this.artists = artists;
+        this.musicUrl = musicUrl;
     }
 
     public String getTitle() {
@@ -32,5 +34,9 @@ public class Music {
 
     public List<String> getArtists() {
         return artists;
+    }
+
+    public String getMusicUrl() {
+        return musicUrl;
     }
 }
