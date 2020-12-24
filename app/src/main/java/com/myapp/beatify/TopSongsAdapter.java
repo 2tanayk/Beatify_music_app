@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAdapter.MyViewHolder> {
     //private List<CreateSong> mRecentSongList;
@@ -29,7 +30,7 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
     }
 
     public interface OnTopSongsItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnTopSongsItemClickListener listener) {
@@ -51,7 +52,7 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
         //public CardView cardView;
@@ -69,7 +70,7 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(getSnapshots().getSnapshot(position), position);
                         }
                     }
                 }

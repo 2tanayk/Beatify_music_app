@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -53,7 +54,7 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
 
@@ -69,7 +70,7 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(getSnapshots().getSnapshot(position), position);
                         }
                     }
                 }

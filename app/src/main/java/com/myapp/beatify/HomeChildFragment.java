@@ -1,7 +1,6 @@
 package com.myapp.beatify;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -40,11 +39,11 @@ public class HomeChildFragment extends Fragment {
 //    private List<String> urls;
 
     private RecyclerView likingRecyclerView;//first RV
-    private RecyclerView recentRecyclerView;//second RV
+    private RecyclerView topRecyclerView;//second RV
     private RecyclerView ourRecyclerView;//third RV
 
     private LikingSongAdapter lAdapter;//adapter for first RV
-    private TopSongsAdapter rAdapter;//adapter for second RV
+    private TopSongsAdapter tAdapter;//adapter for second RV
     private OurPicksAdapter oAdapter;//adapter for third RV
 
     String pref;
@@ -154,6 +153,74 @@ public class HomeChildFragment extends Fragment {
 
     }
 
+
+    private void createTopSongsRecyclerView() {
+        Query query = musicRef.orderBy("title");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
+
+        topRecyclerView = view.findViewById(R.id.user_recent_RV);
+        topRecyclerView.setHasFixedSize(true);
+        topRecyclerView.setNestedScrollingEnabled(false);
+
+        tAdapter = new TopSongsAdapter(options);
+
+
+        topRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        topRecyclerView.setAdapter(tAdapter);
+
+        tAdapter.setOnItemClickListener(
+                new TopSongsAdapter.OnTopSongsItemClickListener() {//not working
+                    @Override
+                    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                        Log.e("Info", "Connected");
+                        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+                        Music music = documentSnapshot.toObject(Music.class);
+                        String musicUrl = music.getMusicUrl();
+
+                        playMusic(musicUrl);
+                    }
+                });
+    }
+
+    private void createOurPicksRecyclerView() {
+        Query query = musicRef.orderBy("title");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
+        ourRecyclerView = view.findViewById(R.id.our_RV);
+        ourRecyclerView.setHasFixedSize(true);
+        ourRecyclerView.setNestedScrollingEnabled(false);
+        oAdapter = new OurPicksAdapter(options);
+
+        ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        ourRecyclerView.setAdapter(oAdapter);
+
+        oAdapter.setOnItemClickListener(new OurPicksAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {//not working
+                Log.e("Info", "Connected");
+                Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+                Music music = documentSnapshot.toObject(Music.class);
+                String musicUrl = music.getMusicUrl();
+
+                playMusic(musicUrl);
+            }
+        });
+//        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
     private void playMusic(String musicUrl) {
 
         if (player == null) {
@@ -178,69 +245,12 @@ public class HomeChildFragment extends Fragment {
         });
     }
 
-    private void createTopSongsRecyclerView() {
-        Query query = musicRef.orderBy("title");
-
-        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
-                .setQuery(query, Music.class)
-                .build();
-
-        recentRecyclerView = view.findViewById(R.id.user_recent_RV);
-        recentRecyclerView.setHasFixedSize(true);
-        recentRecyclerView.setNestedScrollingEnabled(false);
-
-        rAdapter = new TopSongsAdapter(options);
-
-
-        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recentRecyclerView.setAdapter(rAdapter);
-
-        rAdapter.setOnItemClickListener(
-                new TopSongsAdapter.OnTopSongsItemClickListener() {//not working
-                    @Override
-                    public void onItemClick(int position) {
-                        Log.e("Info", "Connected");
-                        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void createOurPicksRecyclerView() {
-        Query query = musicRef.orderBy("title");
-
-        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
-                .setQuery(query, Music.class)
-                .build();
-        ourRecyclerView = view.findViewById(R.id.our_RV);
-        ourRecyclerView.setHasFixedSize(true);
-        ourRecyclerView.setNestedScrollingEnabled(false);
-        oAdapter = new OurPicksAdapter(options);
-
-        ourRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        ourRecyclerView.setAdapter(oAdapter);
-
-        oAdapter.setOnItemClickListener(new OurPicksAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {//not working
-                Log.e("Info", "Connected");
-                Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-//        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         Log.e("HomeChildFragment", "onStart()");
         lAdapter.startListening();
-        rAdapter.startListening();
+        tAdapter.startListening();
         oAdapter.startListening();
     }
 
@@ -249,7 +259,7 @@ public class HomeChildFragment extends Fragment {
         super.onStop();
         Log.e("HomeChildFragment", "onStop()");
         lAdapter.stopListening();
-        rAdapter.stopListening();
+        tAdapter.stopListening();
         oAdapter.stopListening();
     }
 
