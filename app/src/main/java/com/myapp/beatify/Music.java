@@ -8,16 +8,18 @@ public class Music {
     private String category;
     private List<String> artists;
     private String musicUrl;
+    private boolean isTop;
 
     public Music() {
     }
 
-    public Music(String title, String url, String category, List<String> artists, String musicUrl) {
+    public Music(String title, String url, String category, List<String> artists, String musicUrl, boolean isTop) {
         this.title = title;
         this.url = url;
         this.category = category;
         this.artists = artists;
         this.musicUrl = musicUrl;
+        this.isTop = isTop;
     }
 
     public String getTitle() {
@@ -38,5 +40,9 @@ public class Music {
 
     public String getMusicUrl() {
         return musicUrl;
+    }
+
+    public boolean isTop() {
+        return isTop;
     }
 }

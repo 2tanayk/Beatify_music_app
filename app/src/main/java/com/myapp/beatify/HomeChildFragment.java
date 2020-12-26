@@ -1,6 +1,7 @@
 package com.myapp.beatify;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -18,7 +19,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -28,10 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeChildFragment extends Fragment {
+    private static final String SHARED_PREFS = "sharedPrefs";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer player;
 
     private CollectionReference musicRef = db.collection("Music");
+
 
     private List<CreateSong> likingList;//list for the first RV
     private List<CreateSong> recentList;//list for the second RV
@@ -57,7 +64,6 @@ public class HomeChildFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.e("HomeChildFragment", "onCreate()");
 
-        //creating the lists
         createUserLikingList();
         createUserRecentList();
         createOurPicksList();
@@ -121,7 +127,18 @@ public class HomeChildFragment extends Fragment {
     }
 
     private void createUserLikingRecyclerView() {
-        Query query = musicRef.orderBy("title");
+        Log.e("LRV", pref + "");
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+//        while (pref == null) {
+        pref = sharedPreferences.getString("preference", null);
+        //}
+
+        Log.e("LRV", pref + "");
+
+        Query query = musicRef.whereEqualTo("category", pref);
+
 
         FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
                 .setQuery(query, Music.class)
@@ -155,7 +172,7 @@ public class HomeChildFragment extends Fragment {
 
 
     private void createTopSongsRecyclerView() {
-        Query query = musicRef.orderBy("title");
+        Query query = musicRef.whereEqualTo("isTop", true);
 
         FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
                 .setQuery(query, Music.class)
@@ -222,15 +239,19 @@ public class HomeChildFragment extends Fragment {
     }
 
     private void playMusic(String musicUrl) {
+        Log.e("InfoFF", "playMusic");
 
         if (player == null) {
+            Log.e("InfoFF", "creating player");
             player = new MediaPlayer();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         } else {
+            Log.e("InfoFF", "resetting player");
             player.reset();
         }
 
         try {
+            Log.e("InfoFF", "preparing player async");
             player.setDataSource(musicUrl);
             player.prepareAsync();
         } catch (IOException e) {
@@ -240,6 +261,7 @@ public class HomeChildFragment extends Fragment {
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
+                Log.e("InfoFF", "starting player");
                 player.start();
             }
         });

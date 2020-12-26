@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected String username = "";//
     protected String preferences = "";
-    public String   recordPref;
+    public String recordPref;
     public String userDpURL;
     //Initialized a reference of CF
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -118,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
                     if (document != null) {
 
                         username = document.getString("username");
-                        recordPref = document.getString("preferences");
+                        recordPref = document.getString("preference");
+                        Log.e("Check", recordPref + "");
                         userDpURL = document.getString("image_url");
 
                         saveDataLocally();
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 

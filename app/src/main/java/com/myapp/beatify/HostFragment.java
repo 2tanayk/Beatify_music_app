@@ -25,13 +25,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 //we implement the interface to handle onClick() from the nav. drawer
 public class HostFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     //Fragment for homepage
+    String pref;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     View view;
     public LinearLayout bottom;
     public TextView bottomText;
@@ -50,6 +58,33 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("Host Fragment", "onCreate()");
+
+//        DocumentReference userDoc = db.collection("Users")
+//                .document("" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+//
+//        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document != null) {
+//                        // username = document.getString("username");
+//                        pref = document.getString("preference");
+//                        Log.e("Fetch Result", "" + pref);
+//                        // userDpURL = document.getString("image_url");
+//                        // saveDataLocally();
+////                        Log.i("LOGGER","First "+document.getString("first"));
+////                        Log.i("LOGGER","Last "+document.getString("last"));
+////                        Log.i("LOGGER","Born "+document.getString("born"));
+//                        //creating the lists
+//                    } else {
+//                        Log.d("Result", "No such document");
+//                    }
+//                } else {
+//                    Log.d("Result", task.getException().toString());
+//                }
+//            }
+//        });
 
     }//onCreate ends
 
