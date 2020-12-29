@@ -8,7 +8,7 @@ public class MediaEventBus {
     private static final String TAG2 = MediaEventBus.class.getCanonicalName();
 
     public static final int ACTION_MUSIC_PLAYED_FROM_FRAGMENT = 1;
-    public static final int ACTION_MUSIC_OTHER = 2;
+    public static final int ACTION_MUSIC_CONTROLLED_FROM_ACTIVITY = 2;
 
     private static MediaEventBus mInstance;
 
