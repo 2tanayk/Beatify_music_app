@@ -37,6 +37,7 @@ public class HomeChildFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer player;
 
+
     private CollectionReference musicRef = db.collection("Music");
 
 
@@ -263,9 +264,11 @@ public class HomeChildFragment extends Fragment {
             public void onPrepared(MediaPlayer mediaPlayer) {
                 Log.e("InfoFF", "starting player");
                 player.start();
+                MediaEventBus.getInstance().postFragmentAction(MediaEventBus.ACTION_MUSIC_PLAYED_FROM_FRAGMENT);
             }
         });
     }
+
 
     @Override
     public void onStart() {
