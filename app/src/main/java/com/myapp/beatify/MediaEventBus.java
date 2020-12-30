@@ -1,5 +1,7 @@
 package com.myapp.beatify;
 
+import android.util.Log;
+
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
@@ -9,6 +11,8 @@ public class MediaEventBus {
 
     public static final int ACTION_MUSIC_PLAYED_FROM_FRAGMENT = 1;
     public static final int ACTION_MUSIC_CONTROLLED_FROM_ACTIVITY = 2;
+
+    //public MediaEvent mEvent=new MediaEvent(AC)
 
     private static MediaEventBus mInstance;
 
@@ -20,15 +24,17 @@ public class MediaEventBus {
     }
 
     private MediaEventBus() {
+
     }
 
-    private PublishSubject<Integer> fragmentEventSubject = PublishSubject.create();
+    private PublishSubject<MediaEvent> fragmentEventSubject = PublishSubject.create();
 
-    public Observable<Integer> getFragmentEventObservable() {
+    public Observable<MediaEvent> getFragmentEventObservable() {
         return fragmentEventSubject;
     }
 
-    public void postFragmentAction(Integer actionId) {
-        fragmentEventSubject.onNext(actionId);
+    public void postFragmentAction(MediaEvent mediaEvent) {
+        Log.e("EventBus", "postFragmentAction()");
+        fragmentEventSubject.onNext(mediaEvent);
     }
 }

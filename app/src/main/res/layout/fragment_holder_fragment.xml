@@ -32,10 +32,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/bottom_nav_bar"
-                android:layout_marginTop="?attr/actionBarSize">
+                android:layout_marginTop="?attr/actionBarSize"
+                app:layout_anchorGravity="center" />
 
-
-            </FrameLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_nav_bar"
@@ -48,41 +47,56 @@
 
         </RelativeLayout>
 
+
         <LinearLayout
-            android:id="@+id/bottomLL"
+            android:id="@+id/bottomHelperLL"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="50dp"
-            android:background="#FFFFFF"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:transitionName="bottom_player_transition"
+            android:orientation="vertical"
             android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/bottomImg"
-                android:layout_width="65dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/app_logo" />
-
-            <TextView
-                android:id="@+id/bottomTxt"
-                android:layout_width="250dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:text="Waiting For Tomorrow"
-                android:textSize="20dp" />
-
-            <ImageView
+            <SeekBar
+                android:id="@+id/bottomSeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_baseline_play_arrow_24" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
 
+            <LinearLayout
+                android:id="@+id/bottomLL"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:transitionName="bottom_player_transition">
+
+                <ImageView
+                    android:id="@+id/bottomImg"
+                    android:layout_width="65dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/app_logo" />
+
+                <TextView
+                    android:id="@+id/bottomTxt"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="Waiting For Tomorrow"
+                    android:textSize="20dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_baseline_play_arrow_24" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

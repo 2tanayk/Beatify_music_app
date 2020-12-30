@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +44,9 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
 
     View view;
     public LinearLayout bottom;
+    public LinearLayout bottomHelper;
     public TextView bottomText;
+    public SeekBar seekBar;
 
     //public TextView bTxt;
     protected BottomNavigationView bottomNavigationView;
@@ -106,9 +110,13 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         drawerLayout = view.findViewById(R.id.homeFrag);//DrawerLayout for nav. drawer
         navigationView = view.findViewById(R.id.nav_view);//navigation view for the drawer
 
+        bottomHelper = view.findViewById(R.id.bottomHelperLL);
         bottom = view.findViewById(R.id.bottomLL);//for the bottom media player
         //bTxt = view.findViewById(R.id.bottomTxt);
         bottomText = view.findViewById(R.id.bottomTxt);//a part of the bottom media player for the receiving onClick()
+        Log.e("Info HF", bottomText + "");
+        seekBar = view.findViewById(R.id.bottomSeekBar);
+        Log.e("Info HF", seekBar + "");
 
         //to enable sliding in and out on the nav drawer and creating a hamburger icon
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

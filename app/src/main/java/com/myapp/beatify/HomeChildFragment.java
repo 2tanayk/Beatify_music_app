@@ -12,10 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -36,6 +38,8 @@ public class HomeChildFragment extends Fragment {
     private static final String SHARED_PREFS = "sharedPrefs";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer player;
+    private SeekBar mSeekBar;
+    private Handler mHandler = new Handler();
 
 
     private CollectionReference musicRef = db.collection("Music");
@@ -87,10 +91,33 @@ public class HomeChildFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.e("HomeChildFragment", "onViewCreated()");
+        mSeekBar = ((HostFragment) getParentFragment()).seekBar;
+        Log.e("Info seekbar", mSeekBar + "");
+
         //creating the RVs
         createUserLikingRecyclerView();
         createTopSongsRecyclerView();
         createOurPicksRecyclerView();
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (b) {
+                    player.seekTo(i);
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
 
@@ -158,7 +185,7 @@ public class HomeChildFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {//to handle onClicks() (this is working)
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 //HostFragment.bottom.setVisibility(View.VISIBLE);
-                ((HostFragment) getParentFragment()).bottom.setVisibility(View.VISIBLE);
+                ((HostFragment) getParentFragment()).bottomHelper.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 
                 Music music = documentSnapshot.toObject(Music.class);
@@ -259,14 +286,33 @@ public class HomeChildFragment extends Fragment {
             e.printStackTrace();
         }
 
+
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+            public void onPrepared(final MediaPlayer mediaPlayer) {
                 Log.e("InfoFF", "starting player");
-                player.start();
-                MediaEventBus.getInstance().postFragmentAction(MediaEventBus.ACTION_MUSIC_PLAYED_FROM_FRAGMENT);
+
+                mSeekBar.setMax(mediaPlayer.getDuration());
+                mSeekBar.setProgress(0);
+                
+                mediaPlayer.start();
+                MediaEventBus.getInstance().postFragmentAction(new MediaEvent(MediaEventBus.ACTION_MUSIC_PLAYED_FROM_FRAGMENT, player));
+                Log.e("InfoHCF", "Working!!");
+
+                if (mediaPlayer.isPlaying()) {
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            mSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+                            mHandler.postDelayed(this, 1000);
+                        }
+                    };
+
+                }//if ends
             }
         });
+
+
     }
 
 
