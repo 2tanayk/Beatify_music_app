@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
     public LinearLayout bottom;
     public LinearLayout bottomHelper;
     public TextView bottomText;
+    public ImageView controlImageView;
     public SeekBar seekBar;
 
     //public TextView bTxt;
@@ -114,6 +116,8 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         bottom = view.findViewById(R.id.bottomLL);//for the bottom media player
         //bTxt = view.findViewById(R.id.bottomTxt);
         bottomText = view.findViewById(R.id.bottomTxt);//a part of the bottom media player for the receiving onClick()
+        controlImageView = view.findViewById(R.id.controlImg);
+
         Log.e("Info HF", bottomText + "");
         seekBar = view.findViewById(R.id.bottomSeekBar);
         Log.e("Info HF", seekBar + "");

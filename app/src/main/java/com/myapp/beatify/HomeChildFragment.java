@@ -2,12 +2,15 @@ package com.myapp.beatify;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -39,7 +43,9 @@ public class HomeChildFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer player;
     private SeekBar mSeekBar;
+    private ImageView mControlImageView;
     private Handler mHandler = new Handler();
+    boolean flag = true;
 
 
     private CollectionReference musicRef = db.collection("Music");
@@ -92,6 +98,7 @@ public class HomeChildFragment extends Fragment {
 
         Log.e("HomeChildFragment", "onViewCreated()");
         mSeekBar = ((HostFragment) getParentFragment()).seekBar;
+        mControlImageView = ((HostFragment) getParentFragment()).controlImageView;
         Log.e("Info seekbar", mSeekBar + "");
 
         //creating the RVs
@@ -115,6 +122,33 @@ public class HomeChildFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+//        Resources res = getParentFragment().getResources();
+//        final Drawable cDrawable = ResourcesCompat.getDrawable(res, R.drawable.ic_baseline_pause_24, null);
+
+        mControlImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //final Drawable iDrawable = mControlImageView.getDrawable();
+
+
+                //boolean b = iDrawable.getConstantState().equals(cDrawable.getConstantState());
+                //Log.e("Result", b + " " + cDrawable + " " + iDrawable);
+
+                if (flag) {
+                    Log.e("info", "if block");
+                    mControlImageView.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                    player.pause();
+                    flag = false;
+                } else {
+                    Log.e("info", "else block");
+                    mControlImageView.setImageResource(R.drawable.ic_baseline_pause_24);
+                    player.start();
+                    flag = true;
+                }
 
             }
         });
@@ -294,7 +328,7 @@ public class HomeChildFragment extends Fragment {
 
                 mSeekBar.setMax(mediaPlayer.getDuration());
                 mSeekBar.setProgress(0);
-                
+
                 mediaPlayer.start();
                 MediaEventBus.getInstance().postFragmentAction(new MediaEvent(MediaEventBus.ACTION_MUSIC_PLAYED_FROM_FRAGMENT, player));
                 Log.e("InfoHCF", "Working!!");
