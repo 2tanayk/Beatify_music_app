@@ -6,12 +6,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class SearchChildFragment extends Fragment {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference musicRef = db.collection("Music");
+
+    private RecyclerView searchRecyclerView;
+    private SearchFragmentAdapter sAdapter;
+
+    private SearchView searchView;
+    View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +41,7 @@ public class SearchChildFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_child, container, false);
+        view = inflater.inflate(R.layout.fragment_search_child, container, false);
         Log.e("SearchChildFragment", "onCreateView()");
         return view;
     }
@@ -38,6 +56,84 @@ public class SearchChildFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e("SearchChildFragment", "onViewCreated()");
+        searchView = view.findViewById(R.id.searchBox);
+
+        createUserSearchRecyclerView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                querySong(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+    }
+
+    private void querySong(String s) {
+        Log.e("val",s+"");
+        Query query = musicRef.whereEqualTo("title", s);
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
+
+        sAdapter = new SearchFragmentAdapter(options);
+        sAdapter.startListening();
+        searchRecyclerView.setAdapter(sAdapter);
+
+        sAdapter.setOnItemClickListener(
+                new SearchFragmentAdapter.OnItemClickListener() {//not working
+                    @Override
+                    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                        Log.e("Infosa", "Connected");
+                        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+                        Music music = documentSnapshot.toObject(Music.class);
+                        String musicUrl = music.getMusicUrl();
+
+                        //playMusic(musicUrl);
+                    }
+                });
+    }
+
+    private void createUserSearchRecyclerView() {
+        // if(s=null)
+        Query query = musicRef.whereEqualTo("title", "null");
+
+        FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
+                .setQuery(query, Music.class)
+                .build();
+
+        searchRecyclerView = view.findViewById(R.id.searchRV);
+        searchRecyclerView.setHasFixedSize(true);
+
+        searchRecyclerView.setNestedScrollingEnabled(false);
+
+        sAdapter = new SearchFragmentAdapter(options);
+        Log.e("SearchChildFragment", "" + sAdapter);
+
+
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        searchRecyclerView.setAdapter(sAdapter);
+
+        sAdapter.setOnItemClickListener(
+                new SearchFragmentAdapter.OnItemClickListener() {//not working
+                    @Override
+                    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                        Log.e("Infosa", "Connected");
+                        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+                        Music music = documentSnapshot.toObject(Music.class);
+                        String musicUrl = music.getMusicUrl();
+
+                        //playMusic(musicUrl);
+                    }
+                });
     }
 
     @Override
@@ -50,12 +146,16 @@ public class SearchChildFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.e("SearchChildFragment", "onStart()");
+        sAdapter.startListening();
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log.e("SearchChildFragment", "onStop()");
+        sAdapter.stopListening();
+
     }
 
     @Override
