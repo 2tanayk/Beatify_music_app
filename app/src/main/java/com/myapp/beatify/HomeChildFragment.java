@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,9 +42,11 @@ import java.util.List;
 public class HomeChildFragment extends Fragment {
     private static final String SHARED_PREFS = "sharedPrefs";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     MediaPlayer player;
     private SeekBar mSeekBar;
     private ImageView mControlImageView;
+    private ImageView bImageView;
     private Handler mHandler = new Handler();
     boolean flag = true;
 
@@ -97,8 +100,11 @@ public class HomeChildFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.e("HomeChildFragment", "onViewCreated()");
+
         mSeekBar = ((HostFragment) getParentFragment()).seekBar;
         mControlImageView = ((HostFragment) getParentFragment()).controlImageView;
+        bImageView = ((HostFragment) getParentFragment()).bottomImg;
+
         Log.e("Info seekbar", mSeekBar + "");
 
         //creating the RVs
@@ -112,7 +118,6 @@ public class HomeChildFragment extends Fragment {
                 if (b) {
                     player.seekTo(i);
                 }
-
             }
 
             @Override
@@ -219,11 +224,15 @@ public class HomeChildFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {//to handle onClicks() (this is working)
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 //HostFragment.bottom.setVisibility(View.VISIBLE);
-                ((HostFragment) getParentFragment()).bottomHelper.setVisibility(View.VISIBLE);
+
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 
                 Music music = documentSnapshot.toObject(Music.class);
                 String musicUrl = music.getMusicUrl();
+                String url = music.getUrl();
+
+                ((HostFragment) getParentFragment()).bottomText.setText(music.getTitle());
+                Glide.with(getActivity()).load(url).into(bImageView);
 
                 playMusic(musicUrl);
             }
@@ -258,7 +267,12 @@ public class HomeChildFragment extends Fragment {
                         Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 
                         Music music = documentSnapshot.toObject(Music.class);
+
                         String musicUrl = music.getMusicUrl();
+                        String url = music.getUrl();
+
+                        ((HostFragment) getParentFragment()).bottomText.setText(music.getTitle());
+                        Glide.with(getActivity()).load(url).into(bImageView);
 
                         playMusic(musicUrl);
                     }
@@ -288,6 +302,10 @@ public class HomeChildFragment extends Fragment {
 
                 Music music = documentSnapshot.toObject(Music.class);
                 String musicUrl = music.getMusicUrl();
+                String url = music.getUrl();
+
+                ((HostFragment) getParentFragment()).bottomText.setText(music.getTitle());
+                Glide.with(getActivity()).load(url).into(bImageView);
 
                 playMusic(musicUrl);
             }
@@ -301,11 +319,19 @@ public class HomeChildFragment extends Fragment {
     }
 
     private void playMusic(String musicUrl) {
+
         Log.e("InfoFF", "playMusic");
 
         if (player == null) {
             Log.e("InfoFF", "creating player");
-            player = new MediaPlayer();
+            ((HostFragment) getParentFragment()).bottomHelper.setVisibility(View.VISIBLE);
+            //player = new MediaPlayer();
+            player = ((HostFragment) getParentFragment()).player;
+
+            if (player.isPlaying()) {
+                player.reset();
+            }
+
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         } else {
             Log.e("InfoFF", "resetting player");
@@ -341,11 +367,10 @@ public class HomeChildFragment extends Fragment {
                             mHandler.postDelayed(this, 1000);
                         }
                     };
-
+                    mHandler.postDelayed(runnable, 1000);
                 }//if ends
             }
         });
-
 
     }
 

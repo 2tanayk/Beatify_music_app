@@ -2,6 +2,7 @@ package com.myapp.beatify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -48,7 +49,10 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
     public LinearLayout bottomHelper;
     public TextView bottomText;
     public ImageView controlImageView;
+    public ImageView bottomImg;
     public SeekBar seekBar;
+
+    public MediaPlayer player;
 
     //public TextView bTxt;
     protected BottomNavigationView bottomNavigationView;
@@ -98,6 +102,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_holder_fragment, container, false);
+        player = new MediaPlayer();
         Log.e("Host Fragment", "onCreateView()");
 
         return view;
@@ -116,6 +121,7 @@ public class HostFragment extends Fragment implements NavigationView.OnNavigatio
         bottom = view.findViewById(R.id.bottomLL);//for the bottom media player
         //bTxt = view.findViewById(R.id.bottomTxt);
         bottomText = view.findViewById(R.id.bottomTxt);//a part of the bottom media player for the receiving onClick()
+        bottomImg=view.findViewById(R.id.bottomImg);
         controlImageView = view.findViewById(R.id.controlImg);
 
         Log.e("Info HF", bottomText + "");

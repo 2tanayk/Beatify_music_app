@@ -55,7 +55,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="50dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <SeekBar
                 android:id="@+id/bottomSeekBar"
