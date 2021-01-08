@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,7 +39,11 @@ import com.google.firebase.firestore.Query;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class HomeChildFragment extends Fragment {
     private static final String SHARED_PREFS = "sharedPrefs";
@@ -52,6 +58,9 @@ public class HomeChildFragment extends Fragment {
 
 
     private CollectionReference musicRef = db.collection("Music");
+
+    CollectionReference userDoc = db.collection("Users")
+            .document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("Favourites");
 
 
     private List<CreateSong> likingList;//list for the first RV
@@ -89,8 +98,10 @@ public class HomeChildFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_child, container, false);
+
         Fragment fragment = (HostFragment) getParentFragment();
         pref = ((MainActivity) fragment.getActivity()).recordPref;
+
         Log.e("HomeChildFragment", "onCreateView()");
         return view;
     }
@@ -224,8 +235,8 @@ public class HomeChildFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {//to handle onClicks() (this is working)
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 //HostFragment.bottom.setVisibility(View.VISIBLE);
-
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
 
                 Music music = documentSnapshot.toObject(Music.class);
                 String musicUrl = music.getMusicUrl();
@@ -235,6 +246,31 @@ public class HomeChildFragment extends Fragment {
                 Glide.with(getActivity()).load(url).into(bImageView);
 
                 playMusic(musicUrl);
+            }
+        });
+
+        lAdapter.setOnItemLikeListener(new LikingSongAdapter.OnSongLikeListener() {
+            @Override
+            public void onSongLike(DocumentSnapshot documentSnapshot, int position) {
+                Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+                Log.e("FirebaseUI", "onSongLike: " + documentSnapshot.getReference().getId());
+
+                Map<String, Object> like = new HashMap<>();
+                like.put("doc", documentSnapshot.getReference());
+                like.put("id", documentSnapshot.getReference().getId());
+
+                userDoc.add(like).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.e("FirebaseUI", "success");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FirebaseUI", "failed!");
+                    }
+                });
+
             }
         });
 

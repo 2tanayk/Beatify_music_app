@@ -20,6 +20,9 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     //RecyclerView.Adapter<LikingSongAdapter.MyViewHolder>
 //    private List<CreateSong> mSongList;
     private OnItemClickListener mListener;
+    private OnSongLikeListener lListener;
+
+    private boolean lFlag = false;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -35,8 +38,17 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
+    public interface OnSongLikeListener {
+        void onSongLike(DocumentSnapshot documentSnapshot, int position);
+    }
+
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
+    }
+
+    public void setOnItemLikeListener(OnSongLikeListener listener) {
+        lListener = listener;
     }
 
     @NonNull
@@ -44,7 +56,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_user_liking, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view, mListener);
+        MyViewHolder myViewHolder = new MyViewHolder(view, mListener, lListener);
         return myViewHolder;
     }
 //
@@ -65,11 +77,13 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
+        public ImageView lImgView;
 
-        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener, final OnSongLikeListener likeListener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.likingImg);
             this.textView = itemView.findViewById(R.id.nameTxt);
+            this.lImgView = itemView.findViewById(R.id.likeImg);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,9 +93,33 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
 
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(getSnapshots().getSnapshot(position), position);
-                        }
-                    }
-                }
+                        }//if ends
+
+                    }//outer if ends
+                }//onClick ends
+            });
+
+            lImgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (likeListener != null) {
+                        int position = getAdapterPosition();
+
+                        if (!lFlag) {
+                            lFlag = true;
+                            lImgView.setImageResource(R.drawable.ic_heart_fill);
+                        } else {
+                            lFlag = false;
+                            lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                        }//else ends
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            likeListener.onSongLike(getSnapshots().getSnapshot(position), position);
+                        }//if ends
+
+                    }//outer if ends
+                }//onClick ends
+
             });
         }
     }
