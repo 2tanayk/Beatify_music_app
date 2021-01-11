@@ -45,7 +45,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:padding="1dp"
-                android:src="@drawable/ic_heart_unfill" />
+                android:src="@drawable/ic_heart_unfill"
+                android:tag="nl" />
         </LinearLayout>
 
     </LinearLayout>

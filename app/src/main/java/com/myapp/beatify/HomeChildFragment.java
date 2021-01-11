@@ -262,16 +262,34 @@ public class HomeChildFragment extends Fragment {
                 userDoc.add(like).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.e("FirebaseUI", "success");
+                        Log.e("FirebaseUI(user doc)", "success!");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("FirebaseUI", "failed!");
+                        Log.e("FirebaseUI(user doc)", "failed!");
                     }
                 });
 
-            }
+                //DocumentReference musicDoc =
+
+                db.document("" + documentSnapshot.getReference().getPath()).
+                        collection("Likes").
+                        document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                        set(like).
+                        addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.e("FirebaseUI(music doc)", "success!");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FirebaseUI(music doc)", "failed!");
+                    }
+                });
+
+            }//onSongLike ends
         });
 
 

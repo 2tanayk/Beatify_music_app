@@ -1,10 +1,12 @@
 package com.myapp.beatify;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
@@ -68,9 +74,38 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
 //    }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Music model) {
+    protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull Music model) {
         holder.textView.setText(model.getTitle());
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
+        //holder.lImgView.setTag("nl");
+
+        DocumentReference pDoc = getSnapshots().
+                getSnapshot(position).
+                getReference().
+                collection("Likes").
+                document("" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+        pDoc.get().
+                addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                          @Override
+                                          public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                              if (task.isSuccessful()) {
+                                                  DocumentSnapshot document = task.getResult();
+                                                  if (document.exists()) {
+                                                      Log.d("LikingSongAdapter", "Document exists!");
+                                                      holder.lImgView.setImageResource(R.drawable.ic_heart_fill);
+                                                      holder.lImgView.setTag("l");
+                                                      //lFlag = true;
+                                                  } else {
+                                                      Log.d("LikingSongAdapter", "Document does not exist!");
+                                                  }//else ends
+                                              } else {
+                                                  Log.d("LikingSongAdapter", String.valueOf(task.getException()));
+                                              }//else ends
+                                          }//onComplete ends
+                                      }
+                );
     }
 
 
@@ -84,6 +119,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
             this.imageView = itemView.findViewById(R.id.likingImg);
             this.textView = itemView.findViewById(R.id.nameTxt);
             this.lImgView = itemView.findViewById(R.id.likeImg);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,17 +135,22 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                 }//onClick ends
             });
 
+
             lImgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String tag = String.valueOf(lImgView.getTag());
+
                     if (likeListener != null) {
                         int position = getAdapterPosition();
 
-                        if (!lFlag) {
+                        if (tag.equals("nl")) {
                             lFlag = true;
+                            lImgView.setTag("l");
                             lImgView.setImageResource(R.drawable.ic_heart_fill);
                         } else {
                             lFlag = false;
+                            lImgView.setTag("nl");
                             lImgView.setImageResource(R.drawable.ic_heart_unfill);
                         }//else ends
 
