@@ -45,7 +45,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     }
 
     public interface OnSongLikeListener {
-        void onSongLike(DocumentSnapshot documentSnapshot, int position);
+        void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked);
     }
 
 
@@ -74,7 +74,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
 //    }
 
     @Override
-    protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull Music model) {
+    protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull final Music model) {
         holder.textView.setText(model.getTitle());
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
         //holder.lImgView.setTag("nl");
@@ -93,20 +93,22 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                                               if (task.isSuccessful()) {
                                                   DocumentSnapshot document = task.getResult();
                                                   if (document.exists()) {
-                                                      Log.d("LikingSongAdapter", "Document exists!");
+                                                      Log.e("LikingSongAdapter", "Document exists!");
                                                       holder.lImgView.setImageResource(R.drawable.ic_heart_fill);
                                                       holder.lImgView.setTag("l");
+
+                                                      Log.e(model.getTitle(), holder.lImgView.getTag().toString());
                                                       //lFlag = true;
                                                   } else {
-                                                      Log.d("LikingSongAdapter", "Document does not exist!");
+                                                      Log.e("LikingSongAdapter", "Document does not exist!");
                                                   }//else ends
                                               } else {
-                                                  Log.d("LikingSongAdapter", String.valueOf(task.getException()));
+                                                  Log.e("LikingSongAdapter", String.valueOf(task.getException()));
                                               }//else ends
                                           }//onComplete ends
                                       }
                 );
-    }
+    }//onBindViewHolder ends
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -140,6 +142,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                 @Override
                 public void onClick(View view) {
                     String tag = String.valueOf(lImgView.getTag());
+                    Log.e("imgTag", tag);
 
                     if (likeListener != null) {
                         int position = getAdapterPosition();
@@ -148,14 +151,16 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                             lFlag = true;
                             lImgView.setTag("l");
                             lImgView.setImageResource(R.drawable.ic_heart_fill);
+                            Log.e("LikingAdapterLogL", "imgTag " + String.valueOf(lImgView.getTag()) + " like " + lFlag);
                         } else {
                             lFlag = false;
                             lImgView.setTag("nl");
                             lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                            Log.e("LikingAdapterLogNL", "imgTag " + String.valueOf(lImgView.getTag()) + " like " + lFlag);
                         }//else ends
 
                         if (position != RecyclerView.NO_POSITION) {
-                            likeListener.onSongLike(getSnapshots().getSnapshot(position), position);
+                            likeListener.onSongLike(getSnapshots().getSnapshot(position), position, lFlag);
                         }//if ends
 
                     }//outer if ends
