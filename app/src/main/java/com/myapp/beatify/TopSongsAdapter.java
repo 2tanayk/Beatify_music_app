@@ -18,6 +18,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAdapter.MyViewHolder> {
     //private List<CreateSong> mRecentSongList;
     private OnTopSongsItemClickListener mListener;
+    private OnSongLikeListener lListener;
+
+    private boolean lFlag = false;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -33,16 +36,25 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
+    public interface OnSongLikeListener {
+        void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked);
+    }
+
     public void setOnItemClickListener(OnTopSongsItemClickListener listener) {
         mListener = listener;
     }
+
+    public void setOnItemLikeListener(OnSongLikeListener listener) {
+        lListener = listener;
+    }
+
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_recent_songs, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view, mListener);
+        MyViewHolder myViewHolder = new MyViewHolder(view, mListener, lListener);
         return myViewHolder;
     }
 
@@ -55,12 +67,14 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
+        public ImageView lImgView;
         //public CardView cardView;
 
-        public MyViewHolder(@NonNull View itemView, final OnTopSongsItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, final OnTopSongsItemClickListener listener, final OnSongLikeListener likeListener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.recent_img);
             this.textView = itemView.findViewById(R.id.recent_txt);
+            this.lImgView = itemView.findViewById(R.id.likeRSImg);
             //this.cardView = itemView.findViewById(R.id.create_recent_RV);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +87,18 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
                             listener.onItemClick(getSnapshots().getSnapshot(position), position);
                         }
                     }
+                }
+            });
+
+            lImgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (likeListener != null) {
+                        int position = getAdapterPosition();
+
+                        likeListener.onSongLike(getSnapshots().getSnapshot(position), position, lFlag);
+                    }
+
                 }
             });
         }

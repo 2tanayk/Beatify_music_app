@@ -368,6 +368,15 @@ public class HomeChildFragment extends Fragment {
                         playMusic(musicUrl);
                     }
                 });
+
+        tAdapter.setOnItemLikeListener(new TopSongsAdapter.OnSongLikeListener() {
+            @Override
+            public void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked) {
+                Toast.makeText(getActivity(), "clicked T", Toast.LENGTH_SHORT).show();
+                Log.e("TAD", "CLICKED");
+
+            }
+        });
     }
 
     private void createOurPicksRecyclerView() {
@@ -399,6 +408,14 @@ public class HomeChildFragment extends Fragment {
                 Glide.with(getActivity()).load(url).into(bImageView);
 
                 playMusic(musicUrl);
+            }
+        });
+
+        oAdapter.setOnItemLikeListener(new OurPicksAdapter.OnSongLikeListener() {
+            @Override
+            public void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked) {
+                Toast.makeText(getActivity(), "clicked O", Toast.LENGTH_SHORT).show();
+                Log.e("OAD", "CLICKED");
             }
         });
 //        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
