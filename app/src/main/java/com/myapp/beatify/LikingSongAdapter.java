@@ -65,7 +65,20 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
         MyViewHolder myViewHolder = new MyViewHolder(view, mListener, lListener);
         return myViewHolder;
     }
-//
+
+    @Override
+    public void startListening() {
+        super.startListening();
+        Log.e("info", "started listening");
+    }
+
+    @Override
+    public void stopListening() {
+        super.stopListening();
+        Log.e("info", "stopped listening");
+    }
+
+    //
 //    @Override
 //    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 ////        holder.imageView.setImageResource(mSongList.get(position).getImgURL());
@@ -167,6 +180,7 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                 }//onClick ends
 
             });
+
         }
     }
 }
