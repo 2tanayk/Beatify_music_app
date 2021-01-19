@@ -128,13 +128,28 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
             lImgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String tag = String.valueOf(lImgView.getTag());
                     if (likeListener != null) {
                         int position = getAdapterPosition();
 
-                        likeListener.onSongLike(getSnapshots().getSnapshot(position), position, lFlag);
-                    }
+                        if (tag.equals("nl")) {
+                            lFlag = true;
+                            lImgView.setTag("l");
+                            lImgView.setImageResource(R.drawable.ic_heart_fill);
+                            Log.e("LikingAdapterLogL", "imgTag " + String.valueOf(lImgView.getTag()) + " like " + lFlag);
+                        } else {
+                            lFlag = false;
+                            lImgView.setTag("nl");
+                            lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                            Log.e("LikingAdapterLogNL", "imgTag " + String.valueOf(lImgView.getTag()) + " like " + lFlag);
+                        }//else ends
 
-                }
+                        if (position != RecyclerView.NO_POSITION) {
+                            likeListener.onSongLike(getSnapshots().getSnapshot(position), position, lFlag);
+                        }
+                    }//outer if ends
+
+                }//onClick ends
             });
         }
     }
