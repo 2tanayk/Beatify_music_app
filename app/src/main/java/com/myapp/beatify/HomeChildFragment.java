@@ -251,85 +251,15 @@ public class HomeChildFragment extends Fragment {
             }
         });
 
+
         lAdapter.setOnItemLikeListener(new LikingSongAdapter.OnSongLikeListener() {
             @Override
             public void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked) {
-                Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-                Log.e("FirebaseUI", "onSongLike: " + documentSnapshot.getReference().getId());
 
-                Map<String, Object> like = new HashMap<>();
-                like.put("doc", documentSnapshot.getReference());
-                like.put("id", documentSnapshot.getReference().getId());
-
-                Log.e("fbinfo", liked + "");
-                if (liked) {
-                    Log.e("fbinfo", liked + "");
-                    userDoc.add(like).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.e("FirebaseUI(user doc)", "success!");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("FirebaseUI(user doc)", "failed!");
-                        }
-                    });
-
-                    //DocumentReference musicDoc =
-                    db.document("" + documentSnapshot.getReference().getPath()).
-                            collection("Likes").
-                            document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                            set(like).
-                            addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.e("FirebaseUI(music doc)", "success!");
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("FirebaseUI(music doc)", "failed!");
-                        }
-                    });
-
-                } else {
-
-                    userDoc.whereEqualTo("id", documentSnapshot.getReference().getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                //deleting docs from the user sub collection
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("Deleting:", document.getId() + " => " + document.getData());
-                                    document.getReference().delete();
-                                }//for ends
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }//else ends
-                        }//onComplete ends
-                    });
-
-                    db.document("" + documentSnapshot.getReference().getPath()).
-                            collection("Likes").
-                            document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.e("Deleted", "document from music sub-collection");
-                            } else {
-                                Log.e("Deleted Exception", task.getException().toString());
-                            }
-
-                        }
-                    });
-
-                }//else ends
+                likeUnlikeSong(documentSnapshot, position, liked);
 
             }//onSongLike ends
         });
-
-
     }
 
 
@@ -375,6 +305,8 @@ public class HomeChildFragment extends Fragment {
                 Toast.makeText(getActivity(), "clicked T", Toast.LENGTH_SHORT).show();
                 Log.e("TAD", "CLICKED");
 
+                likeUnlikeSong(documentSnapshot, position, liked);
+
             }
         });
     }
@@ -416,6 +348,8 @@ public class HomeChildFragment extends Fragment {
             public void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked) {
                 Toast.makeText(getActivity(), "clicked O", Toast.LENGTH_SHORT).show();
                 Log.e("OAD", "CLICKED");
+
+                likeUnlikeSong(documentSnapshot, position, liked);
             }
         });
 //        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
@@ -425,6 +359,82 @@ public class HomeChildFragment extends Fragment {
 //            }
 //        });
     }
+
+    private void likeUnlikeSong(DocumentSnapshot documentSnapshot, int position, boolean liked) {
+        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+        Log.e("FirebaseUI", "onSongLike: " + documentSnapshot.getReference().getId());
+
+        Map<String, Object> like = new HashMap<>();
+        like.put("doc", documentSnapshot.getReference());
+        like.put("id", documentSnapshot.getReference().getId());
+
+        Log.e("fbinfo", liked + "");
+        if (liked) {
+            Log.e("fbinfo", liked + "");
+            userDoc.add(like).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Log.e("FirebaseUI(user doc)", "success!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("FirebaseUI(user doc)", "failed!");
+                }
+            });
+
+            //DocumentReference musicDoc =
+            db.document("" + documentSnapshot.getReference().getPath()).
+                    collection("Likes").
+                    document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    set(like).
+                    addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.e("FirebaseUI(music doc)", "success!");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("FirebaseUI(music doc)", "failed!");
+                }
+            });
+
+        } else {
+
+            userDoc.whereEqualTo("id", documentSnapshot.getReference().getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        //deleting docs from the user sub collection
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Deleting:", document.getId() + " => " + document.getData());
+                            document.getReference().delete();
+                        }//for ends
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }//else ends
+                }//onComplete ends
+            });
+
+            db.document("" + documentSnapshot.getReference().getPath()).
+                    collection("Likes").
+                    document("" + FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.e("Deleted", "document from music sub-collection");
+                    } else {
+                        Log.e("Deleted Exception", task.getException().toString());
+                    }
+
+                }
+            });
+
+        }//else ends
+
+    }// likeUnlikeSong ends
+
 
     private void playMusic(String musicUrl) {
 
