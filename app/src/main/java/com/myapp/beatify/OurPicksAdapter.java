@@ -1,5 +1,6 @@
 package com.myapp.beatify;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
@@ -60,21 +65,51 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Music model) {
+    protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull final Music model) {
         holder.textView.setText(model.getTitle());
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
+
+        DocumentReference pDoc = getSnapshots().
+                getSnapshot(position).
+                getReference().
+                collection("Likes").
+                document("" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+        pDoc.get().
+                addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                          @Override
+                                          public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                              if (task.isSuccessful()) {
+                                                  DocumentSnapshot document = task.getResult();
+                                                  if (document.exists()) {
+                                                      Log.e("LikingSongAdapter", "Document exists!");
+                                                      holder.lImgView.setImageResource(R.drawable.ic_heart_fill);
+                                                      holder.lImgView.setTag("l");
+
+                                                      Log.e(model.getTitle(), holder.lImgView.getTag().toString());
+                                                      //lFlag = true;
+                                                  } else {
+                                                      Log.e("LikingSongAdapter", "Document does not exist!");
+                                                  }//else ends
+                                              } else {
+                                                  Log.e("LikingSongAdapter", String.valueOf(task.getException()));
+                                              }//else ends
+                                          }//onComplete ends
+                                      }
+                );
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;
-        public ImageView lImageView;
+        public ImageView lImgView;
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener, final OnSongLikeListener likeListener) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.our_img);
             this.textView = itemView.findViewById(R.id.our_txt);
-            this.lImageView = itemView.findViewById(R.id.likeOPImg);
+            this.lImgView = itemView.findViewById(R.id.likeOPImg);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,7 +124,7 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
                 }
             });
 
-            lImageView.setOnClickListener(new View.OnClickListener() {
+            lImgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (likeListener != null) {
