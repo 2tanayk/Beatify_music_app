@@ -49,6 +49,7 @@ import static android.content.ContentValues.TAG;
 
 public class HomeChildFragment extends Fragment {
     private static final String SHARED_PREFS = "sharedPrefs";
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     MediaPlayer player;

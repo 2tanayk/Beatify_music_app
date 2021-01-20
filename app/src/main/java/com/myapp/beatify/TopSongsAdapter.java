@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,13 +18,28 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAdapter.MyViewHolder> {
     //private List<CreateSong> mRecentSongList;
     private OnTopSongsItemClickListener mListener;
     private OnSongLikeListener lListener;
+
+    private ListenerRegistration listenerRegistration;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    CollectionReference userFavouriteDoc = db.collection("Users").
+            document("" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+            .collection("Favourites");
 
     private boolean lFlag = false;
 
@@ -61,7 +77,7 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_recent_songs, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view, mListener, lListener);
         return myViewHolder;
-    }
+    }//onCreateViewHolder ends
 
     @Override
     protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull final Music model) {
@@ -97,7 +113,45 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
                                       }
                 );
 
-    }
+    }//onBindViewHolder ends
+
+    @Override
+    public void startListening() {
+        super.startListening();
+        Log.e("infoTSA", "started listening");
+
+        listenerRegistration = userFavouriteDoc.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("TAG", "listen:error", error);
+                    return;
+                }
+                for (DocumentChange dc : value.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+
+                            break;
+                        case MODIFIED:
+
+                            break;
+                        case REMOVED:
+                            //dc.getDocument()
+                            break;
+                    }//switch ends
+                }//for ends
+            }//onEvent ends
+        });
+
+    }//startListening ends
+
+    @Override
+    public void stopListening() {
+        super.stopListening();
+        Log.e("infoTSA", "stopped listening");
+        listenerRegistration.remove();
+
+    }//stopListening ends
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;

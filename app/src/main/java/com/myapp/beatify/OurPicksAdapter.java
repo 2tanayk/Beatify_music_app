@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,8 +17,15 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -25,6 +33,14 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
     //private List<CreateSong> mOurPicksList;
     private OnItemClickListener mListener;
     private OnSongLikeListener lListener;
+
+    private ListenerRegistration listenerRegistration;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    CollectionReference userFavouriteDoc = db.collection("Users").
+            document("" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+            .collection("Favourites");
 
     private boolean lFlag = false;
 
@@ -98,7 +114,45 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
                                           }//onComplete ends
                                       }
                 );
-    }
+    }//onBindViewHolder ends
+
+    @Override
+    public void startListening() {
+        super.startListening();
+        Log.e("infoOPA", "started listening");
+
+        listenerRegistration = userFavouriteDoc.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("TAG", "listen:error", error);
+                    return;
+                }
+                for (DocumentChange dc : value.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+
+                            break;
+                        case MODIFIED:
+
+                            break;
+                        case REMOVED:
+                            //dc.getDocument()
+                            break;
+                    }//switch ends
+                }//for ends
+            }//onEvent ends
+        });
+
+    }//startListening ends
+
+    @Override
+    public void stopListening() {
+        super.stopListening();
+        Log.e("infoOPA", "stopped listening");
+        listenerRegistration.remove();
+
+    }//stopListening ends
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
