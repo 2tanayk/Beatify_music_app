@@ -35,6 +35,8 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
     private OnItemClickListener mListener;
     private OnSongLikeListener lListener;
 
+    private MyViewHolder holder;
+
     private ListenerRegistration listenerRegistration;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -94,18 +96,10 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                     Log.e("TAG", "listen:error", error);
                     return;
                 }
-                for (DocumentChange dc : value.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
+                for (DocumentSnapshot dc : value.getDocuments()) {
+                    if (!dc.exists()) {
 
-                            break;
-                        case MODIFIED:
-
-                            break;
-                        case REMOVED:
-                            //dc.getDocument()
-                            break;
-                    }//switch ends
+                    }
                 }//for ends
             }//onEvent ends
         });
@@ -130,6 +124,8 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
 
     @Override
     protected void onBindViewHolder(@NonNull final MyViewHolder holder, int position, @NonNull final Music model) {
+        this.holder = holder;
+
         holder.textView.setText(model.getTitle());
         Glide.with(holder.imageView.getContext()).load(model.getUrl()).into(holder.imageView);
         //holder.lImgView.setTag("nl");
@@ -155,6 +151,8 @@ public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSon
                                                       Log.e(model.getTitle(), holder.lImgView.getTag().toString());
                                                       //lFlag = true;
                                                   } else {
+                                                      holder.lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                                                      holder.lImgView.setTag("nl");
                                                       Log.e("LikingSongAdapter", "Document does not exist!");
                                                   }//else ends
                                               } else {

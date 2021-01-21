@@ -104,6 +104,8 @@ public class TopSongsAdapter extends FirestoreRecyclerAdapter<Music, TopSongsAda
 
                                                       Log.e(model.getTitle(), holder.lImgView.getTag().toString());
                                                   } else {
+                                                      holder.lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                                                      holder.lImgView.setTag("nl");
                                                       Log.e("LikingSongAdapter", "Document does not exist!");
                                                   }//else ends
                                               } else {

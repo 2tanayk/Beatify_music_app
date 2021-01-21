@@ -50,6 +50,11 @@ import static android.content.ContentValues.TAG;
 public class HomeChildFragment extends Fragment {
     private static final String SHARED_PREFS = "sharedPrefs";
 
+    public static final int RV_CODE_LS = 1;
+    public static final int RV_CODE_TS = 2;
+    public static final int RV_CODE_OP = 3;
+
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     MediaPlayer player;
@@ -257,7 +262,7 @@ public class HomeChildFragment extends Fragment {
             @Override
             public void onSongLike(DocumentSnapshot documentSnapshot, int position, boolean liked) {
 
-                likeUnlikeSong(documentSnapshot, position, liked);
+                likeUnlikeSong(documentSnapshot, position, liked, RV_CODE_LS);
 
             }//onSongLike ends
         });
@@ -306,7 +311,7 @@ public class HomeChildFragment extends Fragment {
                 Toast.makeText(getActivity(), "clicked T", Toast.LENGTH_SHORT).show();
                 Log.e("TAD", "CLICKED");
 
-                likeUnlikeSong(documentSnapshot, position, liked);
+                likeUnlikeSong(documentSnapshot, position, liked, RV_CODE_TS);
 
             }
         });
@@ -350,7 +355,7 @@ public class HomeChildFragment extends Fragment {
                 Toast.makeText(getActivity(), "clicked O", Toast.LENGTH_SHORT).show();
                 Log.e("OAD", "CLICKED");
 
-                likeUnlikeSong(documentSnapshot, position, liked);
+                likeUnlikeSong(documentSnapshot, position, liked, RV_CODE_OP);
             }
         });
 //        oAdapter.setOnClickListener(new OtherSongsAdapter.OnItemClickListener() {
@@ -361,9 +366,10 @@ public class HomeChildFragment extends Fragment {
 //        });
     }
 
-    private void likeUnlikeSong(DocumentSnapshot documentSnapshot, int position, boolean liked) {
+    private void likeUnlikeSong(DocumentSnapshot documentSnapshot, int position, boolean liked, final int code) {
         Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
         Log.e("FirebaseUI", "onSongLike: " + documentSnapshot.getReference().getId());
+
 
         Map<String, Object> like = new HashMap<>();
         like.put("doc", documentSnapshot.getReference());
@@ -376,6 +382,7 @@ public class HomeChildFragment extends Fragment {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     Log.e("FirebaseUI(user doc)", "success!");
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -393,6 +400,7 @@ public class HomeChildFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.e("FirebaseUI(music doc)", "success!");
+                            updateUI(code);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -425,6 +433,7 @@ public class HomeChildFragment extends Fragment {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.e("Deleted", "document from music sub-collection");
+                        updateUI(code);
                     } else {
                         Log.e("Deleted Exception", task.getException().toString());
                     }
@@ -435,6 +444,19 @@ public class HomeChildFragment extends Fragment {
         }//else ends
 
     }// likeUnlikeSong ends
+
+    private void updateUI(int code) {
+        if (code == RV_CODE_LS) {
+            tAdapter.notifyDataSetChanged();
+            oAdapter.notifyDataSetChanged();
+        } else if (code == RV_CODE_TS) {
+            lAdapter.notifyDataSetChanged();
+            oAdapter.notifyDataSetChanged();
+        } else {
+            lAdapter.notifyDataSetChanged();
+            tAdapter.notifyDataSetChanged();
+        }
+    }
 
 
     private void playMusic(String musicUrl) {

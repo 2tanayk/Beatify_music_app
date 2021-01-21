@@ -106,6 +106,8 @@ public class OurPicksAdapter extends FirestoreRecyclerAdapter<Music, OurPicksAda
                                                       Log.e(model.getTitle(), holder.lImgView.getTag().toString());
                                                       //lFlag = true;
                                                   } else {
+                                                      holder.lImgView.setImageResource(R.drawable.ic_heart_unfill);
+                                                      holder.lImgView.setTag("nl");
                                                       Log.e("LikingSongAdapter", "Document does not exist!");
                                                   }//else ends
                                               } else {
