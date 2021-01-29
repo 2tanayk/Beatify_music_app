@@ -3,4 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavouritesChildFragment"/>
+    tools:context=".FavouritesChildFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favouriteSongsRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</FrameLayout>

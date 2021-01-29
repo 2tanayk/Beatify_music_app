@@ -28,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
 public class LikingSongAdapter extends FirestoreRecyclerAdapter<Music, LikingSongAdapter.MyViewHolder> {
     //RecyclerView.Adapter<LikingSongAdapter.MyViewHolder>
 //    private List<CreateSong> mSongList;

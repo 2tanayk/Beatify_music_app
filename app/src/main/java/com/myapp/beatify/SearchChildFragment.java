@@ -30,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import java.io.IOException;
 
 public class SearchChildFragment extends Fragment {
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference musicRef = db.collection("Music");
 

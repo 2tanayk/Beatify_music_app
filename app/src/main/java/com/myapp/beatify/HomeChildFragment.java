@@ -323,6 +323,7 @@ public class HomeChildFragment extends Fragment {
         FirestoreRecyclerOptions<Music> options = new FirestoreRecyclerOptions.Builder<Music>()
                 .setQuery(query, Music.class)
                 .build();
+
         ourRecyclerView = view.findViewById(R.id.our_RV);
         ourRecyclerView.setHasFixedSize(true);
         ourRecyclerView.setNestedScrollingEnabled(false);
@@ -371,9 +372,11 @@ public class HomeChildFragment extends Fragment {
         Log.e("FirebaseUI", "onSongLike: " + documentSnapshot.getReference().getId());
 
 
-        Map<String, Object> like = new HashMap<>();
+        Map<String,Object> like =documentSnapshot.getData(); //new HashMap<>();
         like.put("doc", documentSnapshot.getReference());
         like.put("id", documentSnapshot.getReference().getId());
+
+
 
         Log.e("fbinfo", liked + "");
         if (liked) {
