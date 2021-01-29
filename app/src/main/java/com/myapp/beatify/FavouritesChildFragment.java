@@ -107,9 +107,9 @@ public class FavouritesChildFragment extends Fragment {
                     mControlImageView.setImageResource(R.drawable.ic_baseline_pause_24);
                     player.start();
                     flag = true;
-                }
+                }//else ends
 
-            }
+            }//onClick ends
         });
     }
 
@@ -180,6 +180,10 @@ public class FavouritesChildFragment extends Fragment {
 
                 mSeekBar.setMax(mediaPlayer.getDuration());
                 mSeekBar.setProgress(0);
+
+                mControlImageView.setImageResource(R.drawable.ic_baseline_pause_24);
+                flag=true;
+
 
                 mediaPlayer.start();
                 MediaEventBus.getInstance().postFragmentAction(new MediaEvent(MediaEventBus.ACTION_MUSIC_PLAYED_FROM_FRAGMENT, player));
